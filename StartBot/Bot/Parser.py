@@ -65,7 +65,8 @@ class Parser:
         if values[0] == 'field':
             player.field.updateField(map(lambda r: map(lambda x: int(x), r.split(',')), values[1].split(';')))
         elif values[0] == 'combo':
-            player.combo = values[1]
+            player.updateCombo(values[1])
         elif values[0] == 'row_points':
-            player.combo = values[1]
-
+            player.updateRowPoints(values[1])
+        elif values[0] == 'skips':
+            player.updateSkips(values[1])
