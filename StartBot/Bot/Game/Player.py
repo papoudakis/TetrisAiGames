@@ -6,6 +6,7 @@ class Player:
         self.name = name
         self.rowPoints = 0
         self.combo = 0
+        self.skips = 0
 
         self.field = Field()
 
@@ -14,3 +15,7 @@ class Player:
 
     def updateCombo(self, combo):
         self.combo = combo
+    
+    def updateSkips(self, skips):
+        
+
