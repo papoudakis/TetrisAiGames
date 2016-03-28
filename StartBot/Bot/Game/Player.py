@@ -17,5 +17,6 @@ class Player:
         self.combo = combo
     
     def updateSkips(self, skips):
+        self.skips = skips
         
 
