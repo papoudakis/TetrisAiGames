@@ -1,8 +1,9 @@
 from Bot.Strategies.RandomStrategy import RandomStrategy
-
+from Bot.Strategies.NoobStrategy import NoobStrategy
 def create(strategyType, game):
     switcher = {
-        "random": RandomStrategy(game)
+        "random": RandomStrategy(game),
+        "noob": NoobStrategy(game)
     }
 
     strategy = switcher.get(strategyType.lower())

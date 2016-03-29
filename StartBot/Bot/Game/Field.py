@@ -57,3 +57,9 @@ class Field:
             return field
         else:
             return None
+
+    def printField(self):
+        print '------------Field-------------'
+        for row in self.field:
+            print row  
+

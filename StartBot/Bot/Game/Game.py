@@ -1,5 +1,5 @@
 from Player import Player
-
+from GameState import GameState
 
 class Game:
     def __init__(self):
@@ -13,4 +13,8 @@ class Game:
         self.piecePosition = None
         self.nextPiece = None
         self.round = 0
-
+    
+    def getInitGameState(self):
+        initState = GameState(self.me.field,self.me.combo,self.me.skips
+            ,self.piece,self.nextPiece,self.piecePosition)
+        return initState
