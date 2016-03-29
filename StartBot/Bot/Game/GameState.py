@@ -13,8 +13,9 @@ class GameState:
     
     def getLegalActions(self):
         legalFields = {};
-        for x in range(0,self.field.width):
-            for y in range(-1,self.field.height-1):
+        k = 0
+        for x in range(-3,self.field.width):
+            for y in range(-3,self.field.height):
                 #~ if self.field.field[y][x] == 0:
                 tmpPiece = copy.deepcopy(self.currentPiece)
                 for rot in range(0,len(tmpPiece._rotations)):
@@ -28,6 +29,7 @@ class GameState:
                     if  tmpField:
                         #Check if it is not in the air
                         if tmpField.isAttached():
+                            k = k +1
                             #Check if it is accesible
                             moves = tmpField.isAccesible(copy.deepcopy(tmpPiece),[x,y],self.piecePos)
                             #~ print moves
@@ -35,7 +37,8 @@ class GameState:
                                 legalFields[(x,y,rot)] = tmpField  
                                 tmpField.printField()
                                 print moves
-
+        print k
+        
                                 
     def printState(self):
         
