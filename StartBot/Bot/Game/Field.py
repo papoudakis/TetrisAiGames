@@ -1,5 +1,6 @@
 import copy
-
+import utils
+import time
 class Field:
     def __init__(self):
         self.width = 10
@@ -36,7 +37,7 @@ class Field:
     def __checkIfPieceFits(self, piecePositions):
         for x,y in piecePositions:
             if 0 <= x < self.width and 0 <= y < self.height:
-                if self.field[y][x] > 1:
+                if self.field[y][x] > 1 and self.field[y][x] < 4 :
                     return False
             else:
                 return False
@@ -63,26 +64,83 @@ class Field:
         i = -1
         for row in self.field:
             i= i+1
-            #~ print i
             if 4 in row:
-                #~ print('AA')
                 j = -1
                 for x in row:
                     j = j+1
-                    #~ print i
                     if i <19:
                        if x ==4 and self.field[i+1][j] == 2:
-                           #~ print('AA')
                            attached = True
                     else:
                         attached = True
         return attached
-                        
-                        
-                    
-            
-         
+    #Returns None if not accesible and the moves if accesible
+    def isAccesible(self,Piece,piecePos,targetPos):
+        targetPos = (targetPos[0],targetPos[1]+1)
+        fringe = utils.PriorityQueue()
+        closed = set()
+        fringe.push(((tuple(piecePos),Piece.rotateCount()),[],0),0)
 
+        while(True):
+            if fringe.isEmpty():
+                return None
+            state,moves,cost = fringe.pop()
+            Piece.updateCount(state[1])
+            #~ print len(closed)
+            #~ print fringe.size()
+            #~ print cost
+            #~ print state[1].rotateCount()
+            #~ if cost > 1:
+                #~ print 'malakas'
+                #~ time.sleep(0.1)
+            if state[0] == targetPos and state[1]==0:
+                return moves
+            #~ print state
+            if state not in closed:
+                closed.add(state)
+                successors = self.getSuccessors(state,targetPos,Piece)
+                if successors:
+                    for next_state,next_move,next_cost in successors:
+                        fringe.push((next_state,moves+[next_move] ,next_cost),next_cost)
+    
+        return moves
+
+    def getSuccessors(self,state,targetPos, Piece):
+
+        piecePos , rot = state
+        actions = ['left', 'right', 'turnleft', 'turnright','up']
+        succ = []
+        for action in actions:
+            if action == 'left':
+               tmpPos = [piecePos[0]-1,piecePos[1]]
+               if self.__checkIfPieceFits(self.__offsetPiece(Piece.positions(),tmpPos)):
+                   succ.append(((tuple(tmpPos),Piece.rotateCount()),'left',utils.manhattanDistance(tmpPos,targetPos)))
+            if action == 'right':
+               tmpPos = [piecePos[0]+1,piecePos[1]]
+               if self.__checkIfPieceFits(self.__offsetPiece(Piece.positions(),tmpPos)):
+                   succ.append(((tuple(tmpPos),Piece.rotateCount()),'right',utils.manhattanDistance(tmpPos,targetPos)))
+            if action == 'up':
+               tmpPos = [piecePos[0],piecePos[1]-1]
+               if self.__checkIfPieceFits(self.__offsetPiece(Piece.positions(),tmpPos)):
+                   succ.append(((tuple(tmpPos),Piece.rotateCount()),'up',utils.manhattanDistance(tmpPos,targetPos)))
+            if action == 'turnleft':
+               tmpPiece = copy.deepcopy(Piece)
+               if tmpPiece.turnLeft():
+                   if self.__checkIfPieceFits(self.__offsetPiece(tmpPiece.positions(),piecePos)):
+                       succ.append(((piecePos,tmpPiece.rotateCount()),'turnleft',utils.manhattanDistance(piecePos,targetPos)))
+            if action == 'turnright':
+               tmpPiece = copy.deepcopy(Piece)
+               if tmpPiece.turnRight():
+                   if self.__checkIfPieceFits(self.__offsetPiece(tmpPiece.positions(),piecePos)):
+                       succ.append(((piecePos,tmpPiece.rotateCount()),'turnright',utils.manhattanDistance(piecePos,targetPos)))
+           
+                #~ temp = [offset - 1, offset + 1]
+                #~ boolean = self.__checkIfPieceFits(piecePos)
+                
+        return succ
+        
+        
+         
         
     def printField(self):
         print '------------Field-------------'

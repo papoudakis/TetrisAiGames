@@ -32,6 +32,9 @@ class Piece:
     def rotateCount(self):
         return self._rotateIndex
 
+    def updateCount(self, rot):
+        self._rotateIndex = rot
+
     def positions(self):
         return self._rotations[self._rotateIndex]
 
