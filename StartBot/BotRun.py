@@ -3,7 +3,7 @@ from sys import stdin, stdout
 from Bot import Planner
 from Bot.Game.Game import Game
 from Bot.Parser import Parser
-
+import time
 
 class Bot:
     def __init__(self, strategy):
@@ -15,6 +15,7 @@ class Bot:
         while not stdin.closed:
             try:
                 line = stdin.readline().strip()
+                time.sleep(0.01)
 
                 if len(line) == 0:
                     continue

@@ -13,4 +13,5 @@ class NoobStrategy(AbstractStrategy):
         moves = map(lambda x: self._actions[x], ind)
         moves.append('drop')
         self.initGameState.printState()
+        self.initGameState.getLegalActions()
         return moves

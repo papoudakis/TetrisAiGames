@@ -24,7 +24,6 @@ class Field:
             field = tmp
 
         return field
-
     @staticmethod
     def __offsetPiece(piecePositions, offset):
         piece = copy.deepcopy(piecePositions)
@@ -53,11 +52,38 @@ class Field:
         if self.__checkIfPieceFits(piece):
             for x,y in piece:
                 field[y][x] = 4
-
-            return field
+            tmpField = Field();
+            tmpField.updateField(field)
+            return tmpField
         else:
             return None
 
+    def isAttached(self):
+        attached = False
+        i = -1
+        for row in self.field:
+            i= i+1
+            #~ print i
+            if 4 in row:
+                #~ print('AA')
+                j = -1
+                for x in row:
+                    j = j+1
+                    #~ print i
+                    if i <19:
+                       if x ==4 and self.field[i+1][j] == 2:
+                           #~ print('AA')
+                           attached = True
+                    else:
+                        attached = True
+        return attached
+                        
+                        
+                    
+            
+         
+
+        
     def printField(self):
         print '------------Field-------------'
         for row in self.field:
