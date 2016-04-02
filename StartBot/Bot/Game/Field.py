@@ -167,7 +167,7 @@ class Field:
     def maxHeigth(self):
 		for row in self.field:
 			if 4 in row or 2 in row:
-				return self.height - self.field.index(row)
+				return self.height - self.field.index(row) + 1
 	
     def numOfCompleteRows(self):
 		completeRows = 0 
@@ -192,7 +192,17 @@ class Field:
             holes = holes + counter	
         return holes
 
-    
+    def computeBumbiness(self):
+        heights = list([0]*self.width)
+        for i in range(self.width):
+            for j in range(self.height):
+                if self.field[j][i] > 1:
+                    heights[i] = self.height - j
+                    break
+                
+        diffs = [abs(j-i) for i, j in zip(heights[:-1], heights[1:])]
+        return sum(diffs)
+        
     def printField(self):
         print '------------Field-------------'
         for row in self.field:
