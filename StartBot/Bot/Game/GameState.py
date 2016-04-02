@@ -22,7 +22,7 @@ class GameState:
                     cool = tmpPiece.turnRight(rot)
                     if not cool:
                         print 'Rotation Failed'
-                        exit()
+                        #~ exit()
                     piecePos = tmpPiece.positions()
                     # Check if it fits
                     tmpField = self.field.fitPiece(piecePos,[x,y])
@@ -41,15 +41,21 @@ class GameState:
         
     def getLegalActions2(self):
         legalFields = { }
+        #~ legalMoves = { }
         for x in range(-2,self.field.width):
             for y in range(-2,self.field.height):
                 for rot in range(0,len(self.currentPiece._rotations)):
                     piecePos = self.currentPiece._rotations[rot]
                     if self.field.isFit(piecePos,[x,y]):
-                        #~ print 'AAAAAAAAAA'
-                        moves = self.field.isAccesible(copy.deepcopy(self.currentPiece),[x,y],self.piecePos)
+                        tmpPiece = copy.deepcopy(self.currentPiece)
+                        tmpPiece.updateCount(rot)
+                        moves = self.field.isAccesible(tmpPiece,[x,y],self.piecePos)
                         if moves:
-                            legalFields[(x,y,rot)] = self.field.fitPiece(piecePos,[x,y])
+                            legalFields[tuple(moves)] = self.field.fitPiece(piecePos,[x,y])
+                            #~ legalFields[(x,y,rot)].printField()
+                            #~ print legalFields[(x,y,rot)].maxHeigth()
+                            #~ legalMoves[(x,y,rot)] = moves
+                            #~ print moves
         return legalFields
                                 
     def printState(self):
@@ -57,4 +63,6 @@ class GameState:
         print "Combos : " + str(self.combo) 
         print "Skips  : " + str(self.skips)
         self.field.printField()
+        
+        
         

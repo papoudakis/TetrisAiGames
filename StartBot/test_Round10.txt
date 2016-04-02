@@ -1,5 +1,3 @@
-Input/output dump
-
 settings timebank 10000
 
 settings time_per_move 500
