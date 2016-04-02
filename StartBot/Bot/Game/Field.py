@@ -42,6 +42,14 @@ class Field:
             else:
                 return False
         return True
+    
+    def __checkIfPieceAttaches(self,piecePositions):
+        attached = False
+        for x,y in piecePositions:
+            if 0 <= x < self.width and 0 <= y < self.height:
+                if  y == 19 or self.field[y+1][x] > 1 :
+                    attached = True
+        return attached
 
     def fitPiece(self, piecePositions, offset=None):
         if offset:
@@ -58,7 +66,18 @@ class Field:
             return tmpField
         else:
             return None
-
+    
+    def isFit(self,piecePositions,offset):
+        piece = self.__offsetPiece(piecePositions, offset)
+        #~ print piece
+        if self.__checkIfPieceFits(piece):
+            #~ print piece
+            if self.__checkIfPieceAttaches(piece):
+                #~ print piece
+                return True
+        
+        return False
+         
     def isAttached(self):
         attached = False
         i = -1
@@ -74,6 +93,8 @@ class Field:
                     else:
                         attached = True
         return attached
+
+
     #Returns None if not accesible and the moves if accesible
     def isAccesible(self,Piece,piecePos,targetPos):
         targetPos = (targetPos[0],targetPos[1]+1)

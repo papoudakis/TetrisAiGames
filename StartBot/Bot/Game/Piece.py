@@ -37,7 +37,7 @@ class Piece:
 
     def positions(self):
         return self._rotations[self._rotateIndex]
-
+    
     def appendRotation(self, rotation):
         self._rotations.append(rotation)
 

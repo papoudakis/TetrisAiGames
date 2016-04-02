@@ -15,7 +15,7 @@ class Bot:
         while not stdin.closed:
             try:
                 line = stdin.readline().strip()
-                #~ time.sleep(0.01)
+                time.sleep(0.01)
 
                 if len(line) == 0:
                     continue
