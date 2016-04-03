@@ -1,46 +1,73 @@
 from random import randint
 from AbstractStrategy import AbstractStrategy
+from Game.GameState import GameState
 import time
+import copy
 #~ from Field import field
 class NoobStrategy(AbstractStrategy):
     def __init__(self, game):
         AbstractStrategy.__init__(self, game)
-        
-        self._actions = ['left', 'right', 'turnleft', 'turnright', 'down', 'drop']
 
     def choose(self):
+        start1 = time.time()
         self.initGameState = self._game.getInitGameState();
-        #~ ind = [randint(0, 4) for _ in range(1, 10)]
-        #~ moves = map(lambda x: self._actions[x], ind)
-        #~ moves.append('drop')
-        #~ self.initGameState.printState()
-        #~ start1 = time.time()
-        #~ oldlegalFields = self.initGameState.getLegalActions()
-        #~ 
-        #~ print 'Number of fields in OldFields is ' + str(len(oldlegalFields))
-        #~ start2 = time.time()
-        legalFields = self.initGameState.getLegalActions2()
-        best_eval = -11111111111111111111111
-        #~ bestField = Field()
-        for moves in legalFields.keys():
-			field = legalFields[moves]
-			score = self.evaluate(field)
-			if score > best_eval:
-				best_eval = score
-				best_moves = moves
-        #~ end2 = time.time()
-        #~ print 'Number of fields in NewFields is ' + str(len(newLegalFields))
-       #~ 
-        #~ print 'Old Fields completed Calculations in ' + str(-start1+end1)
-        #~ print 'New Fields completed Calculations in ' + str(-start2 +end2)
-        #~ legalFields[best_moves].printField()
+        legalFields = self.initGameState.getLegalActions()
+        
+        bestFields, bestMoves = self.FirstLevelStates(legalFields)
+        index = self.SecondLevelStates(bestFields)
+        
+
+        #~ bestFields[index].printField()
         #~ print legalFields[best_moves].numOfHoles()
         #~ print legalFields[best_moves].computeBumbiness()
-        #~ end1 = time.time()
-        #~ print end1 - start1
-        return best_moves
+        end1 = time.time()
+        print end1 - start1
+        return bestMoves[index]
     
     
     def evaluate(self, legalField):
 		return 10*legalField.numOfCompleteRows() - 2*legalField.maxHeigth() - 4*legalField.numOfHoles() - 0.5*legalField.computeBumbiness()
-		
+
+    def FirstLevelStates(self,legalFields):
+        scores  = []
+        fields = []
+        moves = []
+        
+        for move in legalFields.keys():
+            field = legalFields[move]
+            score = self.evaluate(field)
+            scores.append(score)
+            fields.append(field)
+            moves.append(move)
+        
+        
+        scores_index =  sorted(range(len(scores)), key=lambda k: scores[k])
+        scores_index = scores_index[::-1]
+
+        finalFields = []
+        finalMoves =[]
+        
+        MAX_FIELDS = max(5, len(fields))
+        for i in range(MAX_FIELDS):
+            finalFields.append(fields[scores_index[i]])
+            finalMoves.append(moves[scores_index[i]]) 
+        return finalFields, finalMoves
+        
+        
+    def SecondLevelStates(self, legalFields):
+        best_score = -float('Inf')
+        #~ best_Fieds
+        for field in legalFields:
+            i = 0
+            score = []
+            nextState = GameState(copy.deepcopy(field), 0, 0,self.initGameState.nextPiece, None, [3, -1])
+            legalFields2 = nextState.getLegalActions()
+            for f in legalFields2.values():
+                score.append(self.evaluate(f))
+            max_score = max(score)
+            if max_score > best_score:
+                index = i
+                best_score = max_score
+            i = i + 1
+        return i
+            

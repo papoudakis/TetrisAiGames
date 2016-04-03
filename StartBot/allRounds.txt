@@ -464,17 +464,3 @@ action moves 10000
 
 Output from your bot: "turnleft,turnleft,turnleft,turnleft,down,turnleft,right,turnleft,right,drop"
 
-About
-Roadmap
-FAQ
-Languages
-Connect
-Facebook
-Twitter
-Google Plus
-Email
-Legal
-Site rules
-Terms of Service
-Privacy Policy
-©2016 Riddles.io
