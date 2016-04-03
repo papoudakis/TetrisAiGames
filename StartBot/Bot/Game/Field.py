@@ -69,30 +69,12 @@ class Field:
     
     def isFit(self,piecePositions,offset):
         piece = self.__offsetPiece(piecePositions, offset)
-        #~ print piece
         if self.__checkIfPieceFits(piece):
-            #~ print piece
             if self.__checkIfPieceAttaches(piece):
-                #~ print piece
                 return True
         
         return False
          
-    def isAttached(self):
-        attached = False
-        i = -1
-        for row in self.field:
-            i= i+1
-            if 4 in row:
-                j = -1
-                for x in row:
-                    j = j+1
-                    if i <19:
-                       if x ==4 and self.field[i+1][j] == 2:
-                           attached = True
-                    else:
-                        attached = True
-        return attached
 
 
     #Returns None if not accesible and the moves if accesible
@@ -170,16 +152,15 @@ class Field:
 				return self.height - self.field.index(row) + 1
 	
     def numOfCompleteRows(self):
-		completeRows = 0 
-		for row in self.field:
-			if 0 not in row:
-				completeRows = completeRows + 1
-				self.field.pop(self.field.index(row))
-				self.field.insert(0, [0,0,0,0,0,0,0,0,0,0])
-				
-		return completeRows
-	
-				
+        completeRows = 0 
+        for row in self.field:
+            if 0 not in row:
+                completeRows = completeRows + 1
+                self.field.pop(self.field.index(row))
+                self.field.insert(0, [0,0,0,0,0,0,0,0,0,0])
+            
+        return completeRows
+
     def numOfHoles(self):
         holes = 0
         for i in range(self.width):

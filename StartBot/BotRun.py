@@ -1,5 +1,4 @@
 from sys import stdin, stdout
-
 from Bot import Planner
 from Bot.Game.Game import Game
 from Bot.Parser import Parser

@@ -1,19 +1,21 @@
 from random import randint
+import sys,os
+sys.path.append(os.getcwd() + '/Bot/Game')
+from GameState import GameState
 from AbstractStrategy import AbstractStrategy
-from Game.GameState import GameState
 import time
 import copy
 #~ from Field import field
 class NoobStrategy(AbstractStrategy):
     def __init__(self, game):
         AbstractStrategy.__init__(self, game)
-
+        
     def choose(self):
         #~ start1 = time.time()
         self.initGameState = self._game.getInitGameState();
         legalFields = self.initGameState.getLegalActions()
         
-        bestFields, bestMoves = self.FirstLevelStates(legalFields)
+        bestFields, bestMoves , bestScores = self.FirstLevelStates(legalFields)
         index = self.SecondLevelStates(bestFields)
         #~ print len(bestFields)
         #~ print len(bestMoves)
@@ -47,17 +49,18 @@ class NoobStrategy(AbstractStrategy):
 
         finalFields = []
         finalMoves =[]
-        
+        finalScores = []
         MAX_FIELDS = min(3, len(fields))
         for i in range(MAX_FIELDS):
             finalFields.append(fields[scores_index[i]])
-            finalMoves.append(moves[scores_index[i]]) 
-        return finalFields, finalMoves
+            finalMoves.append(moves[scores_index[i]])
+            finalScores.append(scores[scores_index[i]]) 
+            
+        return finalFields, finalMoves,finalScores
         
         
     def SecondLevelStates(self, legalFields):
         best_score = -float('Inf')
-        #~ best_Fieds
         i = 0
         index = 0 
         for field in legalFields:
