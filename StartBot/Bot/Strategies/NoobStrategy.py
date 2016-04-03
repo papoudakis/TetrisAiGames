@@ -1,6 +1,7 @@
 from random import randint
 import sys,os
 sys.path.append(os.getcwd() + '/Bot/Game')
+sys.path.append("/src/StartBot/Bot/Game")
 from GameState import GameState
 from AbstractStrategy import AbstractStrategy
 import time
@@ -12,14 +13,18 @@ class NoobStrategy(AbstractStrategy):
         
     def choose(self):
         #~ start1 = time.time()
+        
         self.initGameState = self._game.getInitGameState();
+        #~ self.initGameState.field.printField()
         legalFields = self.initGameState.getLegalActions()
         
         bestFields, bestMoves , bestScores = self.FirstLevelStates(legalFields)
+        #~ self.report(bestFields,bestMoves,bestScores)
         index = self.SecondLevelStates(bestFields)
         #~ print len(bestFields)
         #~ print len(bestMoves)
 
+        #~ print 'Chosen field ...'
         #~ bestFields[index].printField()
         #~ print legalFields[best_moves].numOfHoles()
         #~ print legalFields[best_moves].computeBumbiness()
@@ -29,7 +34,10 @@ class NoobStrategy(AbstractStrategy):
     
     
     def evaluate(self, legalField):
-        return 10*legalField.numOfCompleteRows() - 2*legalField.maxHeigth() - 4*legalField.numOfHoles() - 0.5*legalField.computeBumbiness()
+        complete_rows =  legalField.numOfCompleteRows()
+        #~ print 'AAAAAAAAAAAAAAAA'
+        #~ print legalField.points
+        return 10*complete_rows- 2*legalField.maxHeigth() - 2*legalField.numOfHoles() - 0.5*legalField.computeBumbiness() + 10*legalField.points , complete_rows
 
     def FirstLevelStates(self,legalFields):
         scores  = []
@@ -38,7 +46,8 @@ class NoobStrategy(AbstractStrategy):
         
         for move in legalFields.keys():
             field = legalFields[move]
-            score = self.evaluate(field)
+            score,complete_rows = self.evaluate(field)
+            field.updatePoints(complete_rows)
             scores.append(score)
             fields.append(field)
             moves.append(move)
@@ -67,8 +76,14 @@ class NoobStrategy(AbstractStrategy):
             score = []
             nextState = GameState(copy.deepcopy(field), 0, 0,self.initGameState.nextPiece, None, [3, -1])
             legalFields2 = nextState.getLegalActions()
+            #~ print 'First Field'
+            #~ field.printField()
             for f in legalFields2.values():
-                score.append(self.evaluate(f))
+                s = self.evaluate(f)[0]
+                score.append(s)
+                #~ print 'Child field'
+                #~ print s
+                
             if score:
                 max_score = max(score)
             if max_score > best_score:
@@ -76,4 +91,21 @@ class NoobStrategy(AbstractStrategy):
                 best_score = max_score
             i = i + 1
         return index
+        
+    def report(self, bestFields, bestMoves , bestScores):
+        for i in range(len(bestFields)):
+            bestFields[i].printField()
+            print 'Score:'+ str(bestScores[i])
+    #~ def report
+            
+            
+            
+            
+            
+            
+            
+        
+        
+        
+        
             

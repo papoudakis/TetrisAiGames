@@ -8,7 +8,7 @@ class Player:
         self.combo = 0
         self.skips = 0
 
-        self.field = Field()
+        self.field = Field(0)
 
     def updateRowPoints(self, rowPoints):
         self.rowPoints = rowPoints

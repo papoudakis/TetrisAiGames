@@ -2,10 +2,11 @@ import copy
 import utils
 import time
 class Field:
-    def __init__(self):
+    def __init__(self,points):
         self.width = 10
         self.height = 20
         self.field = [[0]*self.width]*self.height
+        self.points = points
 
     def size(self):
         return self.width, self.height
@@ -25,6 +26,9 @@ class Field:
             field = tmp
 
         return field
+        
+    def updatePoints(self,points):
+        self.points = points
     @staticmethod
     def __offsetPiece(piecePositions, offset):
         piece = copy.deepcopy(piecePositions)
@@ -37,7 +41,7 @@ class Field:
     def __checkIfPieceFits(self, piecePositions):
         for x,y in piecePositions:
             if 0 <= x < self.width and 0 <= y < self.height:
-                if self.field[y][x] > 1 and self.field[y][x] < 4 :
+                if self.field[y][x] > 1:
                     return False
             else:
                 return False
@@ -61,7 +65,7 @@ class Field:
         if self.__checkIfPieceFits(piece):
             for x,y in piece:
                 field[y][x] = 4
-            tmpField = Field();
+            tmpField = Field(self.points);
             tmpField.updateField(field)
             return tmpField
         else:
@@ -145,16 +149,19 @@ class Field:
                 #~ boolean = self.__checkIfPieceFits(piecePos)
                 
         return succ
+    
+    def getPoints(self):
+        return self.points
         
     def maxHeigth(self):
-		for row in self.field:
+        for row in self.field:
 			if 4 in row or 2 in row:
 				return self.height - self.field.index(row) + 1
 	
     def numOfCompleteRows(self):
         completeRows = 0 
         for row in self.field:
-            if 0 not in row:
+            if 0  not in row and 3 not in row:
                 completeRows = completeRows + 1
                 self.field.pop(self.field.index(row))
                 self.field.insert(0, [0,0,0,0,0,0,0,0,0,0])
