@@ -174,6 +174,9 @@ class Field:
 		for row in self.field:
 			if 0 not in row:
 				completeRows = completeRows + 1
+				self.field.pop(self.field.index(row))
+				self.field.insert(0, [0,0,0,0,0,0,0,0,0,0])
+				
 		return completeRows
 	
 				
