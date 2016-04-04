@@ -7,6 +7,7 @@ class Field:
         self.height = 20
         self.field = [[0]*self.width]*self.height
         self.points = points
+        self.rowsReward = { 1 : 0, 2 : 3 , 3 : 6, 4 : 10, 'all': 18}
 
     def size(self):
         return self.width, self.height
@@ -46,6 +47,18 @@ class Field:
             else:
                 return False
         return True
+
+    def __checkIfPieceFits2(self, piecePositions):
+        for x,y in piecePositions:
+            if y == -1:
+               continue
+            elif 0 <= x < self.width and -1 <y < self.height :
+                if self.field[y][x] > 1:
+                    return False
+            else:
+                return False
+        return True
+    
     
     def __checkIfPieceAttaches(self,piecePositions):
         attached = False
@@ -54,6 +67,8 @@ class Field:
                 if  y == 19 or self.field[y+1][x] > 1 :
                     attached = True
         return attached
+
+    
 
     def fitPiece(self, piecePositions, offset=None):
         if offset:
@@ -83,7 +98,7 @@ class Field:
 
     #Returns None if not accesible and the moves if accesible
     def isAccesible(self,Piece,piecePos,targetPos):
-        targetPos = (targetPos[0],targetPos[1]+1)
+        targetPos = (targetPos[0],targetPos[1])
         fringe = utils.PriorityQueue()
         closed = set()
         fringe.push(((tuple(piecePos),Piece.rotateCount()),[],0),0)
@@ -101,7 +116,7 @@ class Field:
                 #~ print 'malakas'
                 #~ time.sleep(0.1)
             if state[0] == targetPos and state[1]==0:
-                moves.append('down')
+                #~ moves.append('down')
                 moves = moves[::-1]
                 return moves
             #~ print state
@@ -111,7 +126,7 @@ class Field:
                 if successors:
                     for next_state,next_move,next_cost in successors:
                         fringe.push((next_state,moves+[next_move] ,next_cost),next_cost)
-        moves.append('down')
+        #~ moves.append('down')
         moves = moves[::-1]
         print moves
         return moves
@@ -124,25 +139,25 @@ class Field:
         for action in actions:
             if action == 'left':
                tmpPos = [piecePos[0]-1,piecePos[1]]
-               if self.__checkIfPieceFits(self.__offsetPiece(Piece.positions(),tmpPos)):
+               if self.__checkIfPieceFits2(self.__offsetPiece(Piece.positions(),tmpPos)):
                    succ.append(((tuple(tmpPos),Piece.rotateCount()),'right',utils.manhattanDistance(tmpPos,targetPos)))
             if action == 'right':
                tmpPos = [piecePos[0]+1,piecePos[1]]
-               if self.__checkIfPieceFits(self.__offsetPiece(Piece.positions(),tmpPos)):
+               if self.__checkIfPieceFits2(self.__offsetPiece(Piece.positions(),tmpPos)):
                    succ.append(((tuple(tmpPos),Piece.rotateCount()),'left',utils.manhattanDistance(tmpPos,targetPos)))
             if action == 'up':
                tmpPos = [piecePos[0],piecePos[1]-1]
-               if self.__checkIfPieceFits(self.__offsetPiece(Piece.positions(),tmpPos)):
+               if self.__checkIfPieceFits2(self.__offsetPiece(Piece.positions(),tmpPos)):
                    succ.append(((tuple(tmpPos),Piece.rotateCount()),'down',utils.manhattanDistance(tmpPos,targetPos)))
             if action == 'turnleft':
                tmpPiece = copy.deepcopy(Piece)
                if tmpPiece.turnLeft():
-                   if self.__checkIfPieceFits(self.__offsetPiece(tmpPiece.positions(),piecePos)):
+                   if self.__checkIfPieceFits2(self.__offsetPiece(tmpPiece.positions(),piecePos)):
                        succ.append(((piecePos,tmpPiece.rotateCount()),'turnright',utils.manhattanDistance(piecePos,targetPos)))
             if action == 'turnright':
                tmpPiece = copy.deepcopy(Piece)
                if tmpPiece.turnRight():
-                   if self.__checkIfPieceFits(self.__offsetPiece(tmpPiece.positions(),piecePos)):
+                   if self.__checkIfPieceFits2(self.__offsetPiece(tmpPiece.positions(),piecePos)):
                        succ.append(((piecePos,tmpPiece.rotateCount()),'turnleft',utils.manhattanDistance(piecePos,targetPos)))
            
                 #~ temp = [offset - 1, offset + 1]
@@ -159,14 +174,24 @@ class Field:
 				return self.height - self.field.index(row) + 1
 	
     def numOfCompleteRows(self):
-        completeRows = 0 
+        
+        
+        completeRows = 0
+        perfect_clear = True
         for row in self.field:
             if 0  not in row and 3 not in row:
                 completeRows = completeRows + 1
                 self.field.pop(self.field.index(row))
                 self.field.insert(0, [0,0,0,0,0,0,0,0,0,0])
-            
-        return completeRows
+        if 4 in [row for row in self.field] or 2 in [row for row in self.field]:
+            perfect_clear = False
+                
+        if perfect_clear:
+            dict_key = 'all'
+        else:
+            dict_key = complete_rows
+        
+        return completeRows, self.rowsReward[dict_key]
 
     def numOfHoles(self):
         holes = 0
