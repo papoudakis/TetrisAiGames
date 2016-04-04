@@ -34,8 +34,8 @@ class NoobStrategy(AbstractStrategy):
     
     
     def evaluate(self, legalField):
-        complete_rows =  legalField.numOfCompleteRows()
-        return 10*(complete_rows > 1 or legalField.maxHeigth()>14)*complete_rows- 2*legalField.maxHeigth() - 2*legalField.numOfHoles() - 0.5*legalField.computeBumbiness() + 10*legalField.points , complete_rows
+        complete_rows, reward =  legalField.numOfCompleteRows()
+        return 10*complete_rows + 10*reward- 2*legalField.maxHeigth() - 2*legalField.numOfHoles() - 0.5*legalField.computeBumbiness() + 10*legalField.points , reward
 
 
     def FirstLevelStates(self,legalFields):
@@ -45,8 +45,8 @@ class NoobStrategy(AbstractStrategy):
         
         for move in legalFields.keys():
             field = legalFields[move]
-            score,complete_rows = self.evaluate(field)
-            field.updatePoints(complete_rows)
+            score, reward = self.evaluate(field)
+            field.updatePoints(reward)
             scores.append(score)
             fields.append(field)
             moves.append(move)
