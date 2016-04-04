@@ -35,9 +35,8 @@ class NoobStrategy(AbstractStrategy):
     
     def evaluate(self, legalField):
         complete_rows =  legalField.numOfCompleteRows()
-        #~ print 'AAAAAAAAAAAAAAAA'
-        #~ print legalField.points
-        return 10*complete_rows- 2*legalField.maxHeigth() - 2*legalField.numOfHoles() - 0.5*legalField.computeBumbiness() + 10*legalField.points , complete_rows
+        return 10*(complete_rows > 1 or legalField.maxHeigth()>14)*complete_rows- 2*legalField.maxHeigth() - 2*legalField.numOfHoles() - 0.5*legalField.computeBumbiness() + 10*legalField.points , complete_rows
+
 
     def FirstLevelStates(self,legalFields):
         scores  = []
