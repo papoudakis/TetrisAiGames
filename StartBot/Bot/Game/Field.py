@@ -7,7 +7,7 @@ class Field:
         self.height = 20
         self.field = [[0]*self.width]*self.height
         self.points = points
-        self.rowsReward = { 1 : 0, 2 : 3 , 3 : 6, 4 : 10, 'all': 18}
+        self.rowsReward = { 0 : 0 ,1 : 0, 2 : 3 , 3 : 6, 4 : 10, 'all': 18}
 
     def size(self):
         return self.width, self.height
@@ -174,8 +174,6 @@ class Field:
 				return self.height - self.field.index(row) + 1
 	
     def numOfCompleteRows(self):
-        
-        
         completeRows = 0
         perfect_clear = True
         for row in self.field:
@@ -183,17 +181,17 @@ class Field:
                 completeRows = completeRows + 1
                 self.field.pop(self.field.index(row))
                 self.field.insert(0, [0,0,0,0,0,0,0,0,0,0])
-        if 4 in [row for row in self.field] or 2 in [row for row in self.field]:
+        if (4 in row for row in self.field )or (2 in row for row in self.field):
             perfect_clear = False
                 
         if perfect_clear:
             dict_key = 'all'
         else:
-            dict_key = complete_rows
+            dict_key = completeRows
         
         return completeRows, self.rowsReward[dict_key]
 
-    def numOfHoles(self):
+    def numOfHoles(self,heights):
         holes = 0
         for i in range(self.width):
             found = False
@@ -203,19 +201,27 @@ class Field:
                     found = True
                    
                 if found and self.field[j][i]==0:
-                    counter = counter + 1
+                    if i ==0 and heights[i+1]>= self.height -1-j:
+                        counter = counter + 1
+                    elif i == self.width -1 and heights[i-1]>=self.height -1-j:
+                        counter = counter +1
+                    elif heights[i-1] >=self.height -1-j and heights[i+1] >=self.height -1-j:
+                        counter = counter +1
                   
             holes = holes + counter	
         return holes
 
-    def computeBumbiness(self):
+
+    def computeHeigths(self):
         heights = list([0]*self.width)
         for i in range(self.width):
             for j in range(self.height):
                 if self.field[j][i] > 1:
-                    heights[i] = self.height - j
+                    heights[i] = self.height-1 - j
                     break
-                
+        return heights
+                    
+    def computeBumbines(self,heights):
         diffs = [abs(j-i) for i, j in zip(heights[:-1], heights[1:])]
         return sum(diffs)
         

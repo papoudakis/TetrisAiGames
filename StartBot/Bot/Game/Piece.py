@@ -7,7 +7,8 @@ def create(type):
         "J": JPiece(),
         "S": SPiece(),
         "T": TPiece(),
-        "Z": ZPiece()
+        "Z": ZPiece(),
+        "H": HPiece()
     }
 
     return switcher.get(type.upper())
@@ -98,3 +99,9 @@ class ZPiece(Piece):
         self._rotations.append([[2, 0], [1, 1], [2, 1], [1, 2]])
         # self._rotations.append([[0, 1], [1, 1], [1, 2], [2, 2]])
         # self._rotations.append([[1, 0], [0, 1], [1, 1], [0, 2]])
+
+class HPiece(Piece):
+    def __init__(self):
+        Piece.__init__(self)
+        self._rotations.append([[0, 0]])
+        #~ self._rotations.append([[0, 0], [1, 0]])

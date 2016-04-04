@@ -6,13 +6,14 @@ from GameState import GameState
 from AbstractStrategy import AbstractStrategy
 import time
 import copy
+
 #~ from Field import field
 class NoobStrategy(AbstractStrategy):
     def __init__(self, game):
         AbstractStrategy.__init__(self, game)
         
     def choose(self):
-        #~ start1 = time.time()
+        start1 = time.time()
         
         self.initGameState = self._game.getInitGameState();
         #~ self.initGameState.field.printField()
@@ -26,16 +27,18 @@ class NoobStrategy(AbstractStrategy):
 
         #~ print 'Chosen field ...'
         #~ bestFields[index].printField()
+        #~ print bestFields[index].numOfHoles(bestFields[index].computeHeigths())
         #~ print legalFields[best_moves].numOfHoles()
         #~ print legalFields[best_moves].computeBumbiness()
-        #~ end1 = time.time()
-        #~ print end1 - start1
+        end1 = time.time()
+        print end1 - start1
         return bestMoves[index]
     
     
     def evaluate(self, legalField):
         complete_rows, reward =  legalField.numOfCompleteRows()
-        return 10*complete_rows + 10*reward- 2*legalField.maxHeigth() - 2*legalField.numOfHoles() - 0.5*legalField.computeBumbiness() + 10*legalField.points , reward
+        heights = legalField.computeHeigths()
+        return 10*complete_rows + 10*reward- 2*max(heights) - 10*legalField.numOfHoles(heights) - 3*legalField.computeBumbines(heights) + 3*legalField.points , reward+complete_rows
 
 
     def FirstLevelStates(self,legalFields):
