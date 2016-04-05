@@ -201,13 +201,30 @@ class Field:
                     found = True
                    
                 if found and self.field[j][i]==0:
-                    if i ==0 and heights[i+1]>= self.height -1-j:
+                    if i ==0 and heights[i+1]>= self.height - j:
                         counter = counter + 1
-                    elif i == self.width -1 and heights[i-1]>=self.height -1-j:
+                        print str(i) + ',' + str(j)
+                    elif i == self.width -1 and heights[i-1]>=self.height -j:
                         counter = counter +1
-                    elif heights[i-1] >=self.height -1-j and heights[i+1] >=self.height -1-j:
+                        print str(i) + ',' + str(j)
+                    elif i!=0 and i != self.width - 1 and heights[i-1] >= self.height -j and heights[i+1] >=self.height -j:
                         counter = counter +1
-                  
+                        print str(i) + ',' + str(j)
+                if not found and self.field[j][i]==0:
+                    if i == 0 and heights[i+1] > self.height -j and self.field[j][i + 1] == 0:
+                        counter = counter +1
+                        print str(i) + ',' + str(j)
+                    elif i == self.width - 1 and heights[i-1] > self.height - j and self.field[j][i - 1] == 0:
+                        counter = counter +1
+                        print str(i) + ',' + str(j)
+                    elif i!=0 and i != self.width - 1:
+                    #~ and  heights[i-1] >  self.height - 1- j and heights[i+1] > self.height -1-j:
+                        if self.field[j][i - 1] == 0 and heights[i+1] >= self.height -j and  heights[i-1] > self.height - j:
+                            counter = counter +1
+                            print str(i) + ',' + str(j)
+                        if self.field[j][i + 1] == 0 and heights[i-1] >= self.height -j and heights[i+1] > self.height -j:
+                            counter = counter +1
+                            print str(i) + ',' + str(j)
             holes = holes + counter	
         return holes
 
@@ -217,7 +234,7 @@ class Field:
         for i in range(self.width):
             for j in range(self.height):
                 if self.field[j][i] > 1:
-                    heights[i] = self.height-1 - j
+                    heights[i] = self.height - j
                     break
         return heights
                     
