@@ -7,7 +7,8 @@ class Field:
         self.height = 20
         self.field = [[0]*self.width]*self.height
         self.points = points
-        self.rowsReward = { 0 : 0 ,1 : 0, 2 : 3 , 3 : 6, 4 : 10, 'all': 18}
+        self.targetPos = [0,0]
+        self.rowsReward = { 0 : 0 ,1 : 0, 2 : 3 , 3 : 6, 4 : 10, 5: 18}
 
     def size(self):
         return self.width, self.height
@@ -82,6 +83,7 @@ class Field:
                 field[y][x] = 4
             tmpField = Field(self.points);
             tmpField.updateField(field)
+            tmpField.targetPos = offset
             return tmpField
         else:
             return None
@@ -175,21 +177,15 @@ class Field:
 	
     def numOfCompleteRows(self):
         completeRows = 0
-        perfect_clear = True
         for row in self.field:
             if 0  not in row and 3 not in row:
                 completeRows = completeRows + 1
                 self.field.pop(self.field.index(row))
                 self.field.insert(0, [0,0,0,0,0,0,0,0,0,0])
-        if (4 in row for row in self.field )or (2 in row for row in self.field):
-            perfect_clear = False
-                
-        if perfect_clear:
-            dict_key = 'all'
-        else:
-            dict_key = completeRows
-        
-        return completeRows, self.rowsReward[dict_key]
+        for row in self.field:
+            if (4 in row ) or (2 in row ):
+                return completeRows
+        return 5
 
     def numOfHoles(self,heights):
         holes = 0
@@ -219,16 +215,33 @@ class Field:
                         #~ print str(i) + ',' + str(j)
                     elif i!=0 and i != self.width - 1:
                     #~ and  heights[i-1] >  self.height - 1- j and heights[i+1] > self.height -1-j:
-                        if self.field[j][i - 1] == 0 and heights[i+1] >= self.height -j and  heights[i-1] > self.height - j:
+                        if self.field[j][i - 1] == 0 and heights[i+1] >= self.height - j and  heights[i-1] > self.height - j:
                             counter = counter +1
                             #~ print str(i) + ',' + str(j)
-                        if self.field[j][i + 1] == 0 and heights[i-1] >= self.height -j and heights[i+1] > self.height -j:
+                        if self.field[j][i + 1] == 0 and heights[i-1] >= self.height - j and heights[i+1] > self.height - j:
                             counter = counter +1
                             #~ print str(i) + ',' + str(j)
             holes = holes + counter	
         return holes
 
 
+    def computeTspin(self, piece, moves):
+        if piece.returnType() != 'T':
+            return False
+        if moves[-1] != 'turnleft' and moves[-1] != 'turnright':
+            return False
+        counter = 0
+        lcx,lcy = self.targetPos
+        if 0<= lcx < self.width -2 and self.height -2 > lcy >= 0:
+            counter = (self.field[lcy][lcx] ==2 or self.field[lcy][lcx] ==2)*1+ (self.field[lcy+2][lcx] ==2 or self.field[lcy+2][lcx] ==2)*1+ (self.field[lcy][lcx+2] ==2 or self.field[lcy][lcx+2] ==2)*1+ (self.field[lcy+2][lcx+2] ==2 or self.field[lcy+2][lcx+2] ==2)*1
+            if counter == 3:
+                return True 
+        
+        return False
+        
+        
+            
+    
     def computeHeigths(self):
         heights = list([0]*self.width)
         for i in range(self.width):
@@ -237,10 +250,27 @@ class Field:
                     heights[i] = self.height - j
                     break
         return heights
+
+
                     
     def computeBumbines(self,heights):
         diffs = [abs(j-i) for i, j in zip(heights[:-1], heights[1:])]
         return sum(diffs)
+
+
+
+        
+    def computeReward(self, completeRows,tSpin):
+        
+        if completeRows ==5:
+            return self.rowsReward[completeRows]
+
+        if tSpin:
+            return 5*completeRows
+
+        return self.rowsReward[completeRows]
+
+
         
     def printField(self):
         print '------------Field-------------'

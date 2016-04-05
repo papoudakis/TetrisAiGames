@@ -50,12 +50,17 @@ class LPiece(Piece):
         self._rotations.append([[1, 0], [1, 1], [1, 2], [2, 2]])
         self._rotations.append([[0, 1], [1, 1], [2, 1], [0, 2]])
         self._rotations.append([[0, 0], [1, 0], [1, 1], [1, 2]])
-
+    def returnType(self):
+        return 'L'
+        
 class OPiece(Piece):
     def __init__(self):
         Piece.__init__(self)
         self._rotations.append([[0, 0], [1, 0], [0, 1], [1, 1]])
+    def returnType(self):
+        return 'O'
 
+        
 class IPiece(Piece):
     def __init__(self):
         Piece.__init__(self)
@@ -64,6 +69,8 @@ class IPiece(Piece):
         self._rotations.append([[2, 0], [2, 1], [2, 2], [2, 3]])
         # self._rotations.append([[0, 2], [1, 2], [2, 2], [3, 2]])
         # self._rotations.append([[1, 0], [1, 1], [1, 2], [1, 3]])
+    def returnType(self):
+        return 'I'
 
 class JPiece(Piece):
     def __init__(self):
@@ -73,6 +80,8 @@ class JPiece(Piece):
         self._rotations.append([[1, 0], [2, 0], [1, 1], [1, 2]])
         self._rotations.append([[0, 1], [1, 1], [2, 1], [2, 2]])
         self._rotations.append([[1, 0], [1, 1], [0, 2], [1, 2]])
+    def returnType(self):
+        return 'J'
 
 class SPiece(Piece):
     def __init__(self):
@@ -82,6 +91,8 @@ class SPiece(Piece):
         self._rotations.append([[1, 0], [1, 1], [2, 1], [2, 2]])
         # self._rotations.append([[1, 1], [2, 1], [0, 2], [1, 2]])
         # self._rotations.append([[0, 0], [0, 1], [1, 1], [1, 2]])
+    def returnType(self):
+        return 'S'
 
 class TPiece(Piece):
     def __init__(self):
@@ -92,6 +103,9 @@ class TPiece(Piece):
         self._rotations.append([[0, 1], [1, 1], [2, 1], [1, 2]])
         self._rotations.append([[1, 0], [0, 1], [1, 1], [1, 2]])
 
+    def returnType(self):
+        return 'T'
+
 class ZPiece(Piece):
     def __init__(self):
         Piece.__init__(self)
@@ -99,6 +113,8 @@ class ZPiece(Piece):
         self._rotations.append([[2, 0], [1, 1], [2, 1], [1, 2]])
         # self._rotations.append([[0, 1], [1, 1], [1, 2], [2, 2]])
         # self._rotations.append([[1, 0], [0, 1], [1, 1], [0, 2]])
+    def returnType(self):
+        return 'Z'
 
 class HPiece(Piece):
     def __init__(self):

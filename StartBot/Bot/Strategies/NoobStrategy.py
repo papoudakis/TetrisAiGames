@@ -35,12 +35,15 @@ class NoobStrategy(AbstractStrategy):
         return bestMoves[index]
     
     
-    def evaluate(self, legalField):
-        complete_rows, reward =  legalField.numOfCompleteRows()
+    def evaluate(self, legalField, moves, piece):
+        tSpin = legalField.computeTspin(piece, moves)
+        complete_rows =  legalField.numOfCompleteRows()
+        reward = legalField.computeReward(complete_rows, tSpin)
+        
         heights = legalField.computeHeigths()
         w_heights = [0.5, 0.75, 0.75, 1, 1, 1, 1, 0.75, 0.75, 0.5] 
         agg_heights = sum([a*b for a,b in zip(heights,w_heights)])
-        return 7*reward- 2*max(heights) - 10*legalField.numOfHoles(heights) - 2*legalField.computeBumbines(heights) + 6*legalField.points - 0.8*agg_heights, reward
+        return 7*reward- 2*max(heights) - 10*legalField.numOfHoles(heights) - 2*legalField.computeBumbines(heights) + 12*legalField.points - 2*agg_heights, reward
 
 
     def FirstLevelStates(self,legalFields):
@@ -50,8 +53,10 @@ class NoobStrategy(AbstractStrategy):
         
         for move in legalFields.keys():
             field = legalFields[move]
-            score, reward = self.evaluate(field)
+            score, reward = self.evaluate(field,move,self.initGameState.currentPiece)
             field.updatePoints(reward)
+            #~ field.printField()
+            #~ print reward
             scores.append(score)
             fields.append(field)
             moves.append(move)
@@ -82,8 +87,10 @@ class NoobStrategy(AbstractStrategy):
             legalFields2 = nextState.getLegalActions()
             #~ print 'First Field'
             #~ field.printField()
-            for f in legalFields2.values():
-                s = self.evaluate(f)[0]
+            #~ print field.points
+            for move in legalFields2.keys():
+                f = legalFields2[move]
+                s = self.evaluate(f, move, nextState.currentPiece)[0]
                 score.append(s)
                 #~ print 'Child field'
                 #~ print s
