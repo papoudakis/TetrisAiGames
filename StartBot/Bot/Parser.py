@@ -32,7 +32,7 @@ class Parser:
             self._game.enemy.field.height = int(values[1])
 
         elif values[0] == 'timebank':
-            self._game.timebank = values[1]
+            self._game.timebank = int(values[1])
 
         elif values[0] == 'time_per_move':
             self._game.timePerMove = values[1]
@@ -66,8 +66,8 @@ class Parser:
             player.field.updateField(map(lambda r: map(lambda x: int(x), r.split(',')), values[1].split(';')))
             #~ print player.field.field
         elif values[0] == 'combo':
-            player.updateCombo(values[1])
+            player.updateCombo(int(values[1]))
         elif values[0] == 'row_points':
-            player.updateRowPoints(values[1])
+            player.updateRowPoints(int(values[1]))
         elif values[0] == 'skips':
-            player.updateSkips(values[1])
+            player.updateSkips(int(values[1]))

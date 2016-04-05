@@ -230,6 +230,7 @@ class Field:
             return False
         if moves[-1] != 'turnleft' and moves[-1] != 'turnright':
             return False
+        print moves
         counter = 0
         lcx,lcy = self.targetPos
         if 0<= lcx < self.width -2 and self.height -2 > lcy >= 0:

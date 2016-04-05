@@ -3,13 +3,18 @@ import utils
 import copy
 
 class GameState:
-    def __init__(self,field,combo,skips,currentPiece,nextPiece,piecePos):
+    def __init__(self,field,combo,skips,currentPiece,nextPiece,piecePos, timebank):
         self.field = copy.deepcopy(field);
-        self.combo = 0
-        self.skips = 0
+        self.combo = combo
+        self.skips = skips
         self.currentPiece = currentPiece
         self.nextPiece = nextPiece
         self.piecePos = piecePos
+        self.timebank = timebank
+        self.hurry = False
+        if self.timebank < 2000:
+            self.hurry = True
+            
         
     def getLegalActions(self):
         legalFields = { }

@@ -16,5 +16,5 @@ class Game:
     
     def getInitGameState(self):
         initState = GameState(self.me.field,self.me.combo,self.me.skips
-            ,self.piece,self.nextPiece,self.piecePosition)
+            ,self.piece,self.nextPiece,self.piecePosition, self.timebank)
         return initState
