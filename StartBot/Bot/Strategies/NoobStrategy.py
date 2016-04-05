@@ -26,11 +26,10 @@ class NoobStrategy(AbstractStrategy):
         #~ print len(bestMoves)
 
         #~ print 'Chosen field ...'
-        bestFields[index].printField()
-        print bestFields[index].numOfHoles(bestFields[index].computeHeigths())
-        print bestFields[index].computeHeigths()
-        #~ print legalFields[best_moves].numOfHoles()
-        #~ print legalFields[best_moves].computeBumbiness()
+        #~ bestFields[index].printField()
+        #~ print bestFields[index].numOfHoles(bestFields[index].computeHeigths())
+        #~ print bestFields[index].computeHeigths()
+        #~ print bestFields[index].computeBumbines(bestFields[index].computeHeigths())
         #~ end1 = time.time()
         #~ print end1 - start1
         return bestMoves[index]
@@ -39,7 +38,9 @@ class NoobStrategy(AbstractStrategy):
     def evaluate(self, legalField):
         complete_rows, reward =  legalField.numOfCompleteRows()
         heights = legalField.computeHeigths()
-        return 4*reward- 2*max(heights) - 9.5*legalField.numOfHoles(heights) - 3*legalField.computeBumbines(heights) + 6*legalField.points , reward
+        w_heights = [0.5, 0.75, 0.75, 1, 1, 1, 1, 0.75, 0.75, 0.5] 
+        agg_heights = sum([a*b for a,b in zip(heights,w_heights)])
+        return 7*reward- 2*max(heights) - 10*legalField.numOfHoles(heights) - 2*legalField.computeBumbines(heights) + 6*legalField.points - 0.8*agg_heights, reward
 
 
     def FirstLevelStates(self,legalFields):
