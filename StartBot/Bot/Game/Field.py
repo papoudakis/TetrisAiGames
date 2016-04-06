@@ -127,7 +127,7 @@ class Field:
                 successors = self.getSuccessors(state,targetPos,Piece)
                 if successors:
                     for next_state,next_move,next_cost in successors:
-                        fringe.push((next_state,moves+[next_move] ,next_cost),next_cost)
+                        fringe.push((next_state,moves+[next_move] ,next_cost),next_cost )
         #~ moves.append('down')
         moves = moves[::-1]
         print moves
@@ -228,9 +228,7 @@ class Field:
     def computeTspin(self, piece, moves):
         if piece.returnType() != 'T':
             return False
-        if len(moves)<3:
-            return false
-        if moves[-1] != 'turnleft' and moves[-1] != 'turnright' or moves[-2] == 'turnright' or moves[-2] =='turnleft':
+        if moves[-1] != 'turnleft' and moves[-1] != 'turnright' :
             return False
         print moves
         counter = 0

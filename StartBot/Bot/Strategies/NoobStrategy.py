@@ -39,7 +39,7 @@ class NoobStrategy(AbstractStrategy):
         tSpin = legalField.computeTspin(piece, moves)
         complete_rows =  legalField.numOfCompleteRows()
         reward = legalField.computeReward(complete_rows, tSpin)
-        reward = self.initGameState.combo + (legalField.points > 0) + reward
+        reward = self.initGameState.combo*(reward>0)  + reward
         heights = legalField.computeHeigths()
         w_heights = [0.5, 0.75, 0.75, 1, 1, 1, 1, 0.75, 0.75, 0.5] 
         agg_heights = sum([a*b for a,b in zip(heights,w_heights)])
@@ -68,10 +68,12 @@ class NoobStrategy(AbstractStrategy):
         finalFields = []
         finalMoves =[]
         finalScores = []
+        
         if self.initGameState.hurry:
             MAX_FIELDS = min(3, len(fields))
         else:
             MAX_FIELDS = min(5, len(fields))
+            
         for i in range(MAX_FIELDS):
             finalFields.append(fields[scores_index[i]])
             finalMoves.append(moves[scores_index[i]])
@@ -86,7 +88,7 @@ class NoobStrategy(AbstractStrategy):
         index = 0 
         for field in legalFields:
             score = []
-            nextState = GameState(copy.deepcopy(field), self.initGameState.combo, 0,self.initGameState.nextPiece, None, [3, -1], self.initGameState.timebank)
+            nextState = GameState(copy.deepcopy(field), (self.initGameState.combo+1)*(field.points), 0,self.initGameState.nextPiece, None, [3, -1], self.initGameState.timebank)
             legalFields2 = nextState.getLegalActions()
             print 'First Field'
             field.printField()
@@ -95,8 +97,8 @@ class NoobStrategy(AbstractStrategy):
                 f = legalFields2[move]
                 s = self.evaluate(f, move, nextState.currentPiece)[0]
                 score.append(s)
-                #~ print 'Child field'
-                #~ print s
+                print 'Child field'
+                print s
                 
             if score:
                 max_score = max(score)
