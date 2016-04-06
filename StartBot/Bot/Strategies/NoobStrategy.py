@@ -88,17 +88,17 @@ class NoobStrategy(AbstractStrategy):
         index = 0 
         for field in legalFields:
             score = []
-            nextState = GameState(copy.deepcopy(field), (self.initGameState.combo+1)*(field.points), 0,self.initGameState.nextPiece, None, [3, -1], self.initGameState.timebank)
+            nextState = GameState(copy.deepcopy(field), (self.initGameState.combo+1)*(field.points>0), self.initGameState.skips,self.initGameState.nextPiece, None, [3, -1], self.initGameState.timebank)
             legalFields2 = nextState.getLegalActions()
-            print 'First Field'
-            field.printField()
-            print field.points
+            #~ print 'First Field'
+            #~ field.printField()
+            #~ print field.points
             for move in legalFields2.keys():
                 f = legalFields2[move]
                 s = self.evaluate(f, move, nextState.currentPiece)[0]
                 score.append(s)
-                print 'Child field'
-                print s
+                #~ print 'Child field'
+                #~ print s
                 
             if score:
                 max_score = max(score)

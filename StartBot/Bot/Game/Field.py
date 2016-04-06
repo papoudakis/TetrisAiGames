@@ -130,7 +130,7 @@ class Field:
                         fringe.push((next_state,moves+[next_move] ,next_cost),next_cost )
         #~ moves.append('down')
         moves = moves[::-1]
-        print moves
+        #~ print moves
         return moves
 
     def getSuccessors(self,state,targetPos, Piece):
@@ -172,9 +172,9 @@ class Field:
         
     def maxHeigth(self):
         for row in self.field:
-			if 4 in row or 2 in row:
-				return self.height - self.field.index(row) + 1
-	
+            if 4 in row or 2 in row:
+                return self.height - self.field.index(row) + 1
+
     def numOfCompleteRows(self):
         completeRows = 0
         for row in self.field:
@@ -230,7 +230,7 @@ class Field:
             return False
         if moves[-1] != 'turnleft' and moves[-1] != 'turnright' :
             return False
-        print moves
+       
         counter = 0
         lcx,lcy = self.targetPos
         if 0<= lcx < self.width -2 and self.height -2 > lcy >= 0:

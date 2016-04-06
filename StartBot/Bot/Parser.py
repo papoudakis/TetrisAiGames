@@ -13,6 +13,8 @@ class Parser:
             self.set(parts[1:])
         elif parts[0] == 'update':
             self.update(parts[1:])
+        elif parts[0] == 'action':
+            self._game.timebank = int(parts[2])
 
     def set(self, values):
         if values[0] == 'player_names':
@@ -35,7 +37,7 @@ class Parser:
             self._game.timebank = int(values[1])
 
         elif values[0] == 'time_per_move':
-            self._game.timePerMove = values[1]
+            self._game.timePerMove = int(values[1])
 
     def update(self, values):
         if values[0] == 'game':

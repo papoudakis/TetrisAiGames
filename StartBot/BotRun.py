@@ -29,6 +29,7 @@ class Bot:
 
     def interpret(self, line):
         if line.startswith('action'):
+            self._parser.parse(line)
             return self._planner.makeMove()
         else:
             self._parser.parse(line)
