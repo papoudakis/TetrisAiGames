@@ -228,7 +228,9 @@ class Field:
     def computeTspin(self, piece, moves):
         if piece.returnType() != 'T':
             return False
-        if moves[-1] != 'turnleft' and moves[-1] != 'turnright':
+        if len(moves)<3:
+            return false
+        if moves[-1] != 'turnleft' and moves[-1] != 'turnright' or moves[-2] == 'turnright' or moves[-2] =='turnleft':
             return False
         print moves
         counter = 0
