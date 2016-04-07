@@ -42,8 +42,9 @@ class NoobStrategy(AbstractStrategy):
         reward = self.initGameState.combo*(reward>0)  + reward
         heights = legalField.computeHeigths()
         w_heights = [0.5, 0.75, 0.75, 1, 1, 1, 1, 0.75, 0.75, 0.5] 
-        agg_heights = sum([a*b for a,b in zip(heights,w_heights)])
-        return 7*reward- 2*max(heights) - 10*legalField.numOfHoles(heights) - 2*legalField.computeBumbines(heights) + 12*legalField.points - 2*agg_heights, reward
+        agg_heights = [a*b for a,b in zip(heights,w_heights)]
+        agg_heights2 = sum([a - min(agg_heights) for a in agg_heights])
+        return 7*reward- 2*max(heights) - 10*legalField.numOfHoles(heights) - 2*legalField.computeBumbines(heights) + 12*legalField.points - 2*agg_heights2, reward
 
 
     def FirstLevelStates(self,legalFields):
