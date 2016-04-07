@@ -12,7 +12,7 @@ class GameState:
         self.piecePos = piecePos
         self.timebank = timebank
         self.hurry = False
-        if self.timebank < 3000:
+        if self.timebank < 4000:
             self.hurry = True
             
         

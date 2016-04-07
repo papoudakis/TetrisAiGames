@@ -114,14 +114,4 @@ class NoobStrategy(AbstractStrategy):
             print 'Score:'+ str(bestScores[i])
     #~ def report
             
-            
-            
-            
-            
-            
-            
         
-        
-        
-        
-            
