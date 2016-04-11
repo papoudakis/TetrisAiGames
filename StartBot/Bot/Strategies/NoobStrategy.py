@@ -18,7 +18,9 @@ class NoobStrategy(AbstractStrategy):
         self.initGameState = self._game.getInitGameState();
         #~ self.initGameState.field.printField()
         legalFields = self.initGameState.getLegalActions()
-        
+        if self.initGameState.skips > 0:
+            legalFields[tuple(['skip'])] = self.initGameState.field
+            
         bestFields, bestMoves , bestScores = self.FirstLevelStates(legalFields)
         #~ self.report(bestFields,bestMoves,bestScores)
         index = self.SecondLevelStates(bestFields)
@@ -47,18 +49,18 @@ class NoobStrategy(AbstractStrategy):
         #~ print numOfTholes
         #~ print agg_heights
         #~ agg_heights2 = sum([a - min(agg_heights) for a in agg_heights])
-        return 7*reward - 2*max(heights) - 10*legalField.numOfHoles(heights) - 2*legalField.computeBumbines(heights) + 12*legalField.points - 0.2*agg_heights + 20*numOfTholes, reward
+        return 7*reward - 2*max(heights) - 10*legalField.numOfHoles(heights) - 2*legalField.computeBumbines(heights) + 12*legalField.points - 0.2*agg_heights + 8*numOfTholes**2, reward
 
 
     def FirstLevelStates(self,legalFields):
         scores  = []
         fields = []
         moves = []
-        
         for move in legalFields.keys():
             field = legalFields[move]
             score, reward = self.evaluate(field,move,self.initGameState.currentPiece)
             field.updatePoints(reward)
+            #~ print move
             #~ field.printField()
             #~ print score
             scores.append(score)
