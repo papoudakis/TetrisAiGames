@@ -42,9 +42,12 @@ class NoobStrategy(AbstractStrategy):
         reward = self.initGameState.combo*(reward>0)  + reward
         heights = legalField.computeHeigths()
         w_heights = [0.5, 0.75, 0.75, 1, 1, 1, 1, 0.75, 0.75, 0.5] 
-        agg_heights = [a*b for a,b in zip(heights,w_heights)]
-        agg_heights2 = sum([a - min(agg_heights) for a in agg_heights])
-        return 7*reward- 2*max(heights) - 10*legalField.numOfHoles(heights) - 2*legalField.computeBumbines(heights) + 12*legalField.points - 2*agg_heights2, reward
+        agg_heights = sum([a*b for a,b in zip(heights,w_heights)])
+        numOfTholes = legalField.checkForTholes()
+        #~ print numOfTholes
+        #~ print agg_heights
+        #~ agg_heights2 = sum([a - min(agg_heights) for a in agg_heights])
+        return 7*reward - 2*max(heights) - 10*legalField.numOfHoles(heights) - 2*legalField.computeBumbines(heights) + 12*legalField.points - 0.2*agg_heights + 20*numOfTholes, reward
 
 
     def FirstLevelStates(self,legalFields):
@@ -57,7 +60,7 @@ class NoobStrategy(AbstractStrategy):
             score, reward = self.evaluate(field,move,self.initGameState.currentPiece)
             field.updatePoints(reward)
             #~ field.printField()
-            #~ print reward
+            #~ print score
             scores.append(score)
             fields.append(field)
             moves.append(move)
@@ -75,7 +78,7 @@ class NoobStrategy(AbstractStrategy):
         else:
             MAX_FIELDS = min(5, len(fields))
             
-        for i in range(MAX_FIELDS):
+        for i in range(5):
             finalFields.append(fields[scores_index[i]])
             finalMoves.append(moves[scores_index[i]])
             finalScores.append(scores[scores_index[i]]) 

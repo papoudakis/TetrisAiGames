@@ -267,10 +267,22 @@ class Field:
             return self.rowsReward[completeRows]
 
         if tSpin:
+            #~ malakizomaste
             return 5*completeRows
 
         return self.rowsReward[completeRows]
 
+    def checkForTholes(self):
+        for i in range(self.width-4):
+            for j in range(self.height-2):
+                if self.field[j+1][i] > 1 and self.field[j+1][i+1]==0 and self.field[j+1][i+2]==0 and self.field[j+1][i+3]==0 and self.field[j+1][i+4]>1:
+                    if self.field[j+2][i + 1] > 1 and self.field[j+2][i+2]==0 and self.field[j+2][i+3] > 1:
+                        if self.field[j][i+2]==0 and bool(self.field[j][i+1])^bool(self.field[j][i+3]):
+                            counter = 0
+                            list1 = sum([bool(a) for a in self.field[j+1]])
+                            list2 = sum([bool(a) for a in self.field[j+2]])
+                            return (list1==7) + (list2==9)
+        return 0
 
         
     def printField(self):
