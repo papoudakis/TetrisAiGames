@@ -51,7 +51,7 @@ class Field:
 
     def __checkIfPieceFits2(self, piecePositions):
         for x,y in piecePositions:
-            if y == -1:
+            if y == -1 and 0 <= x < self.width:
                continue
             elif 0 <= x < self.width and -1 <y < self.height :
                 if self.field[y][x] > 1:
@@ -121,6 +121,7 @@ class Field:
                 #~ moves.append('down')
                 moves = moves[::-1]
                 return moves
+            #~ print moves
             #~ print state
             if state not in closed:
                 closed.add(state)
