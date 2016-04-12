@@ -12,9 +12,9 @@ class Game:
         self.piece = None
         self.piecePosition = None
         self.nextPiece = None
-        self.round = 0
+        self.Round = 0
     
     def getInitGameState(self):
         initState = GameState(self.me.field,self.me.combo,self.me.skips
-            ,self.piece,self.nextPiece,self.piecePosition, self.timebank)
+            ,self.piece,self.nextPiece,self.piecePosition, self.timebank,self.Round)
         return initState

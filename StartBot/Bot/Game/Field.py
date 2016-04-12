@@ -7,7 +7,7 @@ class Field:
         self.height = 20
         self.field = [[0]*self.width]*self.height
         self.points = points
-        self.targetPos = [0,0]
+        #~ self.targetPos = [0,0]
         self.rowsReward = { 0 : 0 ,1 : 0, 2 : 3 , 3 : 6, 4 : 10, 5: 18}
 
     def size(self):
@@ -187,7 +187,19 @@ class Field:
             if (4 in row ) or (2 in row ):
                 return completeRows
         return 5
-
+        
+    def solidLines(self,Round):
+        if (Round)%15:
+            return False
+        else:
+            firstRow = self.field.pop(0)
+            self.field.append([3,3,3,3,3,3,3,3,3,3])
+            if (4 in firstRow ) or (2 in firstRow ):
+                return True
+            else:
+                return False
+            
+                 
     def numOfHoles(self,heights):
         holes = 0
         for i in range(self.width):
@@ -285,7 +297,7 @@ class Field:
                             return (list1==7) + (list2==9)
         return 0
 
-        
+    
     def printField(self):
         print '------------Field-------------'
         for row in self.field:

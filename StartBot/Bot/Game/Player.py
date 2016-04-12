@@ -7,7 +7,6 @@ class Player:
         self.rowPoints = 0
         self.combo = 0
         self.skips = 0
-
         self.field = Field(0)
 
     def updateRowPoints(self, rowPoints):

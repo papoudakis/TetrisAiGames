@@ -56,7 +56,7 @@ class Parser:
             self._game.nextPiece = Piece.create(values[1])
 
         elif values[0] == 'round':
-            self._game.round = int(values[1])
+            self._game.Round = int(values[1])
 
     def updatePlayer(self, playerName, values):
         if playerName != self._game.me.name:

@@ -3,7 +3,7 @@ import utils
 import copy
 
 class GameState:
-    def __init__(self,field,combo,skips,currentPiece,nextPiece,piecePos, timebank):
+    def __init__(self,field,combo,skips,currentPiece,nextPiece,piecePos, timebank,Round):
         self.field = copy.deepcopy(field);
         self.combo = combo
         self.skips = skips
@@ -11,6 +11,7 @@ class GameState:
         self.nextPiece = nextPiece
         self.piecePos = piecePos
         self.timebank = timebank
+        self.Round = Round
         self.hurry = False
         if self.timebank < 4000:
             self.hurry = True
