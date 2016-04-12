@@ -90,6 +90,7 @@ class NoobStrategy(AbstractStrategy):
         
     def SecondLevelStates(self, legalFields):
         best_score = -float('Inf')
+        max_score =  -float('Inf')
         i = 0
         index = 0 
         for field in legalFields:
