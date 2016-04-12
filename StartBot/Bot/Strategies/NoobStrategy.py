@@ -86,7 +86,7 @@ class NoobStrategy(AbstractStrategy):
         else:
             MAX_FIELDS = min(5, len(fields))
             
-        for i in range(5):
+        for i in range(MAX_FIELDS):
             finalFields.append(fields[scores_index[i]])
             finalMoves.append(moves[scores_index[i]])
             finalScores.append(scores[scores_index[i]]) 
