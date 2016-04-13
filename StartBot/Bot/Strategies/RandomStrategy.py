@@ -1,5 +1,4 @@
 from random import randint
-
 from AbstractStrategy import AbstractStrategy
 
 

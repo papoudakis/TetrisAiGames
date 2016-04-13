@@ -9,7 +9,7 @@ import time
 import copy
 
 #~ from Field import field
-class NoobStrategy(AbstractStrategy):
+class SuperStrategy(AbstractStrategy):
     def __init__(self, game):
         AbstractStrategy.__init__(self, game)
         
@@ -56,7 +56,7 @@ class NoobStrategy(AbstractStrategy):
         #~ print numOfTholes
         #~ print agg_heights
         #~ agg_heights2 = sum([a - min(agg_heights) for a in agg_heights])
-        return 7*reward - 2*max(heights) - 10*legalField.numOfHoles(heights) - 2*legalField.computeBumbines(heights)  + 12*legalField.points - 0.2*agg_heights + 8*numOfTholes**2, reward
+        return 7*reward - 2*max(heights) - 20*legalField.numOfHoles(heights) - 2*legalField.computeBumbines(heights)  + 12*legalField.points - 0.2*agg_heights + 8*numOfTholes**2, reward
 
 
     def FirstLevelStates(self,legalFields):
@@ -87,7 +87,7 @@ class NoobStrategy(AbstractStrategy):
         else:
             MAX_FIELDS = min(5, len(fields))
             
-        for i in range(MAX_FIELDS):
+        for i in range(5):
             finalFields.append(fields[scores_index[i]])
             finalMoves.append(moves[scores_index[i]])
             finalScores.append(scores[scores_index[i]]) 

@@ -1,8 +1,9 @@
-from sys import stdin, stdout
+from sys import stdin, stdout ,  stderr
 from Bot import Planner
 from Bot.Game.Game import Game
 from Bot.Parser import Parser
 import time
+import sys
 
 class Bot:
     def __init__(self, strategy):
@@ -41,4 +42,15 @@ class Bot:
 
 
 if __name__ == '__main__':
-    Bot("noob").run()
+    if len(sys.argv[1:])==0:
+         Bot("noob").run()
+    else:
+        for arg in sys.argv[1:]:
+            if arg=='a':
+                Bot("noob").run()
+            elif arg=='b':
+                Bot("super").run()
+       
+         
+        
+    
