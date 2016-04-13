@@ -167,7 +167,13 @@ public abstract class AbstractGame implements Logic {
 		// save results to file here
 		String playedGame = this.processor.getPlayedGame();
 		//~ System.out.println(playedGame);
-        System.err.println(this.processor.getWinner().getName());
+        if (this.processor.getWinner()!= null){
+            System.err.println(this.processor.getWinner().getName());
+        }
+        else{
+           System.err.println("draw");
+       }
+        
         System.err.flush();
 	}
 }
