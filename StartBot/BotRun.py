@@ -42,9 +42,9 @@ class Bot:
 
 
 if __name__ == '__main__':
-    if len(sys.argv[1:])==0:
-         Bot("noob").run()
-    else:
+    #~ if len(sys.argv[1:])==0:
+         #~ Bot("noob").run()
+    #~ else:
         for arg in sys.argv[1:]:
             if arg=='a':
                 Bot("noob").run()

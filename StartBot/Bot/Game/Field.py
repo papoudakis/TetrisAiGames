@@ -1,6 +1,7 @@
 import copy
 import utils
 import time
+import sys
 class Field:
     def __init__(self,points):
         self.width = 10
@@ -299,8 +300,8 @@ class Field:
 
     
     def printField(self):
-        print '------------Field-------------'
+        sys.stderr.write('------------Field-------------\n')
         for row in self.field:
-            print row  
+           sys.stderr.write(str(row) + '\n')  
 
    

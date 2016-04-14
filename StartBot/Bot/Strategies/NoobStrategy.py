@@ -24,13 +24,13 @@ class NoobStrategy(AbstractStrategy):
             
         bestFields, bestMoves , bestScores = self.FirstLevelStates(legalFields)
         #~ self.report(bestFields,bestMoves,bestScores)
-        index = self.SecondLevelStates(bestFields)
-        #~ index = 0
+        #~ index = self.SecondLevelStates(bestFields)
+        index = 0
         #~ print len(bestFields)
         #~ print len(bestMoves)
 
-        #~ print 'Chosen field ...'
-        #~ bestFields[index].printField()
+        #~ sys.stderr.write('Chosen field ...') 
+        bestFields[index].printField()
         #~ print bestFields[index].numOfHoles(bestFields[index].computeHeigths())
         #~ print bestFields[index].computeHeigths()
         #~ print bestFields[index].computeBumbines(bestFields[index].computeHeigths())

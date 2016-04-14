@@ -173,7 +173,12 @@ public abstract class AbstractGame implements Logic {
         else{
            System.err.println("draw");
        }
-        
+       
+        for(IOPlayer ioPlayer : this.engine.getPlayers()) {
+            //~ System.out.println(ioPlayer.getDump());
+            System.err.println(ioPlayer.getStderr());
+                      }
+        System.out.flush();              
         System.err.flush();
 	}
 }

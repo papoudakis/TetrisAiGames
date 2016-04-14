@@ -24,8 +24,8 @@ class SuperStrategy(AbstractStrategy):
             
         bestFields, bestMoves , bestScores = self.FirstLevelStates(legalFields)
         #~ self.report(bestFields,bestMoves,bestScores)
-        index = self.SecondLevelStates(bestFields)
-        #~ index = 0
+        #~ index = self.SecondLevelStates(bestFields)
+        index = 0
         #~ print len(bestFields)
         #~ print len(bestMoves)
 
@@ -56,9 +56,9 @@ class SuperStrategy(AbstractStrategy):
         #~ print numOfTholes
         #~ print agg_heights
         #~ agg_heights2 = sum([a - min(agg_heights) for a in agg_heights])
-        return 7*reward - 2*max(heights) - 20*legalField.numOfHoles(heights) - 2*legalField.computeBumbines(heights)  + 12*legalField.points - 0.2*agg_heights + 8*numOfTholes**2, reward
-
-
+        #~ return 7*reward - 2*max(heights) - 20*legalField.numOfHoles(heights) - 2*legalField.computeBumbines(heights)  + 12*legalField.points - 0.2*agg_heights + 8*numOfTholes**2, reward
+        return 7*reward - 2*max(heights) - 20*legalField.numOfHoles(heights) - 2*legalField.computeBumbines(heights)  + 12*legalField.points - 0.2*agg_heights + 8*numOfTholes**2 - 3*(10-max(heights))*(not tSpin)*(complete_rows==1), reward
+        #~ return 10*legalField.numOfHoles(heights)
     def FirstLevelStates(self,legalFields):
         scores  = []
         fields = []
