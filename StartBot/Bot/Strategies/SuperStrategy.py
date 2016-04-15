@@ -24,8 +24,8 @@ class SuperStrategy(AbstractStrategy):
             
         bestFields, bestMoves , bestScores = self.FirstLevelStates(legalFields)
         #~ self.report(bestFields,bestMoves,bestScores)
-        #~ index = self.SecondLevelStates(bestFields)
-        index = 0
+        index = self.SecondLevelStates(bestFields)
+        #~ index = 0
         #~ print len(bestFields)
         #~ print len(bestMoves)
 
@@ -57,7 +57,11 @@ class SuperStrategy(AbstractStrategy):
         #~ print agg_heights
         #~ agg_heights2 = sum([a - min(agg_heights) for a in agg_heights])
         #~ return 7*reward - 2*max(heights) - 20*legalField.numOfHoles(heights) - 2*legalField.computeBumbines(heights)  + 12*legalField.points - 0.2*agg_heights + 8*numOfTholes**2, reward
-        return 7*reward - 2*max(heights) - 20*legalField.numOfHoles(heights) - 2*legalField.computeBumbines(heights)  + 12*legalField.points - 0.2*agg_heights + 8*numOfTholes**2 - 3*(10-max(heights))*(not tSpin)*(complete_rows==1), reward
+        numOfHoles, holes = legalField.numOfHoles(heights)
+        coastline = legalField.computeCoastLine(holes)
+        
+        #~ return 7*reward  - 10*numOfHoles  -2*agg_heights+ 12*legalField.points  + 10*numOfTholes**2 - 1*coastline, reward
+        return 7*reward - 2*max(heights) - 10*numOfHoles - 2*legalField.computeBumbines(heights)  + 12*legalField.points - 0.2*agg_heights + 8*numOfTholes**2, reward
         #~ return 10*legalField.numOfHoles(heights)
     def FirstLevelStates(self,legalFields):
         scores  = []
@@ -87,7 +91,7 @@ class SuperStrategy(AbstractStrategy):
         else:
             MAX_FIELDS = min(5, len(fields))
             
-        for i in range(5):
+        for i in range(MAX_FIELDS):
             finalFields.append(fields[scores_index[i]])
             finalMoves.append(moves[scores_index[i]])
             finalScores.append(scores[scores_index[i]]) 

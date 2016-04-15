@@ -203,6 +203,7 @@ class Field:
                  
     def numOfHoles(self,heights):
         holes = 0
+        holesPos =[]
         for i in range(self.width):
             found = False
             counter = 0
@@ -213,12 +214,15 @@ class Field:
                 if found and self.field[j][i]==0:
                     if i ==0 and heights[i+1]>= self.height - j:
                         counter = counter + 1
+                        holesPos.append([j,i])
                         #~ print str(i) + ',' + str(j)
                     elif i == self.width -1 and heights[i-1]>=self.height -j:
                         counter = counter +1
+                        holesPos.append([j,i])
                         #~ print str(i) + ',' + str(j)
                     elif i!=0 and i != self.width - 1 and heights[i-1] >= self.height -j and heights[i+1] >=self.height -j:
                         counter = counter +1
+                        holesPos.append([j,i])
                         #~ print str(i) + ',' + str(j)
                 if not found and self.field[j][i]==0:
                     if i == 0 and heights[i+1] > self.height -j and self.field[j][i + 1] == 0:
@@ -236,7 +240,7 @@ class Field:
                             counter = counter +1
                             #~ print str(i) + ',' + str(j)
             holes = holes + counter	
-        return holes
+        return holes, holesPos
 
 
     def computeTspin(self, piece, moves):
@@ -281,7 +285,6 @@ class Field:
             return self.rowsReward[completeRows]
 
         if tSpin:
-            #~ malakizomaste
             return 5*completeRows
 
         return self.rowsReward[completeRows]
@@ -298,6 +301,24 @@ class Field:
                             return (list1==7) + (list2==9)
         return 0
 
+
+    def computeCoastLine(self,  holes):
+        coastline = []
+        for i in range(1,self.width-1):
+            for j in range(self.height):
+                if self.field[j][i]==0 and [j,i] not in holes:
+                    if j == self.height - 1:
+                        coastline.append([j,i])
+                        #~ continue
+                    elif j==0 and (self.field[j+1][i] > 1 or self.field[j + 1][i + 1] > 1 or self.field[j + 1][i - 1] > 1 or self.field[j][i + 1] >1 or self.field[j][i - 1] > 1 ):
+                        coastline.append([j,i])
+                        #~ continue
+                    elif j!=0 and j!=self.height-1 and (self.field[j+1][i] > 1 or self.field[j + 1][i + 1] > 1 or self.field[j + 1][i - 1] > 1 or self.field[j][i + 1] >1 or self.field[j][i - 1] > 1 or self.field[j - 1][i] > 1 or self.field[j - 1][i + 1] > 1 or self.field[j - 1][i - 1] > 1):
+                        coastline.append([j,i])
+                        #~ continue
+                
+        
+        return len(coastline) + 2
     
     def printField(self):
         sys.stderr.write('------------Field-------------\n')
