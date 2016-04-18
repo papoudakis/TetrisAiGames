@@ -319,7 +319,24 @@ class Field:
                 
         
         return len(coastline) + 2
-    
+
+    def computeSemiCompleteRows(self, holes):
+        counter = 0
+        empty = 110
+        found = False
+        i = 0
+        for rows in self.field:
+            if rows.count(2) + rows.count(4)==9:
+                if not found and ([i, rows.index(0)] not in holes):
+                    empty = rows.index(0)
+                    found = True
+                    counter = 1
+                elif found:
+                    if empty == rows.index(0):
+                        counter = counter + 1
+            i = i + 1
+        return counter
+        
     def printField(self):
         sys.stderr.write('------------Field-------------\n')
         for row in self.field:
