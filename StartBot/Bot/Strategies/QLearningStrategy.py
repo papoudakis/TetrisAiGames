@@ -14,25 +14,31 @@ import copy
 class QLearningStrategy(AbstractStrategy):
     
     def __init__(self, game):
-        AbstractStrategy.__init__(self, game)
-        
-    def initEveryThing(self):
-        self.weigths = [50, -0.5, -10, 10, -1, 3]
-        self.alpha = 0.5
-        self.discount = 0.8
+        AbstractStrategy.__init__(self, game)        
+        #~ self.weights = [50, -0.5, -10, 10, -1, 3]
+        self.weights = [50.0, -1.1730124359580474, -9.96388286249445, 9.977906246576895, -0.2072693538683254, 2.8544003030622247]
+        self.alpha = 0.0001
+        self.discount = 0.5
         
     def choose(self):
         #~ start1 = time.time()
-        self.initEveryThing()
-        print 'ante geia'
+        #~ self.initEveryThing()
+        #~ print 'ante geia'
         self.initGameState = self._game.getInitGameState();
         #~ self.initGameState.field.printField()
         legalFields = self.initGameState.getLegalActions()
         if self.initGameState.skips > 0:
             legalFields[tuple(['skip'])] = self.initGameState.field
         
-        return  self.getValue(legalFields, self.initGameState.currentPiece, self.initGameState.Round)
-    
+        best_val, moves = self.getValue(legalFields, self.initGameState.currentPiece, self.initGameState.Round)
+        tSpin = legalFields[moves].computeTspin(self.initGameState.currentPiece, moves)
+        complete_rows =  legalFields[moves].numOfCompleteRows()
+        reward = legalFields[moves].computeReward(complete_rows, tSpin)
+        reward = self.initGameState.combo*(reward>0)  + reward
+        reward = reward - max(legalFields[moves].computeHeigths())/3
+        self.update(legalFields, moves, self.initGameState.currentPiece, self.initGameState.Round, reward)
+        return moves
+        
     def computeFeatures(self, legalField, moves, piece,Round):
         # Compute values of features and store them in a list
         
@@ -61,18 +67,18 @@ class QLearningStrategy(AbstractStrategy):
         coastline = legalField.computeCoastLine(holes)
         semiCompleteRows = legalField.computeSemiCompleteRows(holes)
         
-        feature.append(tSpin)
-        feature.append(agg_heights)
-        feature.append(numOfHoles)
-        feature.append(numOfTholes**2)
-        feature.append(coastline)
-        feature.append(semiCompleteRows**2*(semiCompleteRows>1))
+        features.append(tSpin)
+        features.append(agg_heights)
+        features.append(numOfHoles)
+        features.append(numOfTholes**2)
+        features.append(coastline)
+        features.append(semiCompleteRows**2*(semiCompleteRows>1))
         return features
     
     def getQValue(self, legalFields, moves, piece,Round):
     # evalute a field based on moves 
         qValue = 0.0
-        features = self.computefeatures(copy.deepcopy(legalFields[moves]), moves, piece, Round)
+        features = self.computeFeatures(copy.deepcopy(legalFields[moves]), moves, piece, Round)
         for i in range(len(features)):
             qValue += (self.weights[i] * features[i])
         return qValue
@@ -84,15 +90,23 @@ class QLearningStrategy(AbstractStrategy):
         for moves in legalFields.keys():
             possibleStateQValues[moves] = self.getQValue(legalFields, moves, piece,Round)
         
-        return max(possibleStateQValues, key=possibleStateQValues.get)
+        return max(possibleStateQValues.values()), max(possibleStateQValues, key=possibleStateQValues.get)
     
     
-    def update(self, legalFields, moves, piece, Round, nextState, reward):
+    def update(self, legalFields, moves, piece, Round, reward):
         
     #  Should update your weights based on transition
         
-        features = self.computefeatures(legalFields[moves], moves, piece,Round)
+        features = self.computeFeatures(legalFields[moves], moves, piece,Round)
+        
+        
+        
+        nextState = GameState(copy.deepcopy(legalFields[moves]), (self.initGameState.combo+1)*(legalFields[moves].points>0), self.initGameState.skips,self.initGameState.nextPiece, None, [3, -1], self.initGameState.timebank,self.initGameState.Round +1)
+        legalFields2 = nextState.getLegalActions()
+        bestQValue, bst_moves = self.getValue(legalFields2, nextState.currentPiece, nextState.Round)
+        
         for i in range(len(features)):
             # getValues should be fixed !!!!!!!!!!!!!!!!
-            self.weights[i] += self.alpha * (reward + self.discount * self.getValue(legalFields, piece, Round) - self.getQValue(legalFields, moves, piece, Round) * features[i])
-        return moves    
+            
+            self.weights[i] += self.alpha * (reward + self.discount * bestQValue  - self.getQValue(legalFields, moves, piece, Round)) * features[i]
+        sys.stderr.write(str(self.weights) + '\n')
