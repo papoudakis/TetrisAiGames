@@ -43,11 +43,11 @@ class Bot:
 
 if __name__ == '__main__':
     if len(sys.argv[1:])==0:
-         Bot("QLearning").run()
+         Bot("qlearning").run()
     else:
         for arg in sys.argv[1:]:
             if arg=='a':
-                Bot("QLearning").run()
+                Bot("qlearning").run()
             elif arg=='b':
                 Bot("super").run()
        
