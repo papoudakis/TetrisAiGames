@@ -1,11 +1,14 @@
 from Bot.Strategies.RandomStrategy import RandomStrategy
 from Bot.Strategies.NoobStrategy import NoobStrategy
 from Bot.Strategies.SuperStrategy import SuperStrategy
+from Bot.Strategies.QLearningStrategy import QLearningStrategy
+
 def create(strategyType, game):
     switcher = {
         "random": RandomStrategy(game),
         "noob": NoobStrategy(game),
-        "super":SuperStrategy(game)
+        "super":SuperStrategy(game),
+        "QLearning": QLearningStrategy(game)
     }
 
     strategy = switcher.get(strategyType.lower())
