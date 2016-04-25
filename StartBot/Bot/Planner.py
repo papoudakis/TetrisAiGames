@@ -8,7 +8,7 @@ def create(strategyType, game):
         "random": RandomStrategy(game),
         "noob": NoobStrategy(game),
         "super":SuperStrategy(game),
-        "QLearning": QLearningStrategy(game)
+        "qlearning": QLearningStrategy(game)
     }
 
     strategy = switcher.get(strategyType.lower())
