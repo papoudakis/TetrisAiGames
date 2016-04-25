@@ -2,6 +2,7 @@ from random import randint
 import sys,os
 sys.path.append("/home/konstantinos/AiGames/TetrisAiGames/StartBot/Bot/Game")
 sys.path.append("/home/giorgos/University/TetrisAiGames/StartBot/Bot/Game")
+sys.path.append("/home/argiris/Desktop/TetrisAiGames/StartBot/Bot/Game")
 sys.path.append(os.getcwd() + '/Bot/Game')
 sys.path.append("/src/StartBot/Bot/Game")
 from GameState import GameState
@@ -64,8 +65,9 @@ class NoobStrategy(AbstractStrategy):
 
         numOfHoles, holes = legalField.numOfHoles(heights)
         coastline = legalField.computeCoastLine(holes)
-        
-        return 7*reward  - 10*numOfHoles  -0.2*agg_heights+ 12*legalField.points -1*legalField.computeBumbines(heights) + 10*numOfTholes**2 - 1*(coastline-10), reward
+        semiCompleteRows = legalField.computeSemiCompleteRows(holes)
+
+        return 7*reward - 10*numOfHoles + 10*legalField.points + 20*numOfTholes**2 - 1*max(heights), reward
 
     def FirstLevelStates(self,legalFields):
         scores  = []

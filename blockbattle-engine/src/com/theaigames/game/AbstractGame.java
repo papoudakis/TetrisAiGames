@@ -175,7 +175,7 @@ public abstract class AbstractGame implements Logic {
        }
        
         for(IOPlayer ioPlayer : this.engine.getPlayers()) {
-            //~ System.out.println(ioPlayer.getDump());
+            System.out.println(ioPlayer.getDump());
             System.err.println(ioPlayer.getStderr());
                       }
         System.out.flush();              
