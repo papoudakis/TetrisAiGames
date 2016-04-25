@@ -26,8 +26,9 @@ class QLearningStrategy(AbstractStrategy):
             weights_str = weights_str.split(',')
             self.weights = [float(w) for w in  weights_str]
                      
-        self.alpha = 0.001
-        self.discount = 0.0
+        self.alpha = 0.0001
+        self.discount = 0
+        
         fl.close()
     def choose(self):
         self.initGameState = self._game.getInitGameState();
@@ -40,14 +41,8 @@ class QLearningStrategy(AbstractStrategy):
         sys.stderr.write('Best_val:' + str(best_val) +' ')
         if moves == tuple(['drop']):
             return moves
-        tempField = copy.deepcopy(legalFields[moves])
-        tSpin = tempField.computeTspin(self.initGameState.currentPiece, moves)
-        complete_rows =  tempField.numOfCompleteRows()
-        heights = tempField.computeHeigths()
-        reward = tempField.computeReward(complete_rows, tSpin)
-        reward = self.initGameState.combo*(reward>0)  + reward  
-        reward = reward - max(heights)
-        sys.stderr.write('Reward:' + str(reward) + '\n')
+            
+        reward = self.computeReward(copy.deepcopy(legalFields[moves]),moves)
 
         self.update(legalFields, moves, self.initGameState.currentPiece, self.initGameState.Round, reward)
         f = open('weights.txt','w')
@@ -55,6 +50,16 @@ class QLearningStrategy(AbstractStrategy):
         f.close()
         
         return moves
+        
+    def computeReward(self,legalField,moves):
+        tSpin = legalField.computeTspin(self.initGameState.currentPiece, moves)#???????
+        complete_rows =  legalField.numOfCompleteRows()
+        heights = legalField.computeHeigths()
+        reward = legalField.computeReward(complete_rows, tSpin)
+        reward = self.initGameState.combo*(reward>0)  + reward  
+        reward = reward - max(heights)
+        sys.stderr.write('Reward:' + str(reward) + '\n')
+        return reward
         
     def computeFeatures(self, legalField, moves, piece,Round):
         # Compute values of features and store them in a list
