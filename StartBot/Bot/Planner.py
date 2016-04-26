@@ -2,13 +2,15 @@ from Bot.Strategies.RandomStrategy import RandomStrategy
 from Bot.Strategies.NoobStrategy import NoobStrategy
 from Bot.Strategies.SuperStrategy import SuperStrategy
 from Bot.Strategies.QLearningStrategy import QLearningStrategy
+from Bot.Strategies.NeuralNetStrategy import NeuralNetStrategy
 
 def create(strategyType, game):
     switcher = {
         "random": RandomStrategy(game),
         "noob": NoobStrategy(game),
         "super":SuperStrategy(game),
-        "qlearning": QLearningStrategy(game)
+        #~ "qlearning": QLearningStrategy(game),
+        "nnet": NeuralNetStrategy(game)
     }
 
     strategy = switcher.get(strategyType.lower())
