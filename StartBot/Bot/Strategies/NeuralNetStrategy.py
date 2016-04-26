@@ -123,6 +123,9 @@ class NeuralNetStrategy(AbstractStrategy):
     #  Should update your weights based on transition
         
         #~ features = self.computeFeatures(legalFields[moves], moves, piece,Round)
+        #delete complete rows
+        complete_rows = legalField[moves].numOfCompleteRows()
+        
         nextState = GameState(legalFields[moves], (self.initGameState.combo+1)*(legalFields[moves].points>0), self.initGameState.skips,self.initGameState.nextPiece, None, [3, -1], self.initGameState.timebank,self.initGameState.Round +1)
         legalFields2 = nextState.getLegalActions()
         bestQValue, bst_moves = self.getValue(legalFields2, nextState.currentPiece, nextState.Round)
@@ -136,7 +139,7 @@ class NeuralNetStrategy(AbstractStrategy):
         dloss = self.sigmoid(loss) * (1 - self.sigmoid(loss))
         
         dloss = np.array(dloss)
-        #~ print dloss.size
+        print dloss.size
         
         dW2 = -self.X1 * (dloss)
         
