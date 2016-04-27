@@ -14,11 +14,46 @@ class NeuralNetStrategy(AbstractStrategy):
     
     def __init__(self, game):
         AbstractStrategy.__init__(self, game)
-        self.W1 = np.random.rand(200, 50)
-        self.W2 = np.random.rand(50, 1)
-        
+        fl = open('weights.txt', 'r')
+        weights_str = fl.readlines()
+        counter = 0
+        self.secondLayer = 1000
+        self.W1 = np.zeros((200, self.secondLayer))
+        self.W2 = np.zeros((self.secondLayer, 1))
+        self.b1 = np.zeros((self.secondLayer, 1))
+        for line in weights_str:
+            if counter > 202:
+                break
+            if line in ['\n', '\r\n']:
+                self.W1 = np.random.rand(200, self.secondLayer)
+                self.W2 = np.random.rand(self.secondLayer, 1)
+                self.b1 = np.random.rand(self.secondLayer, 1) 
+                break
+            else:
+                
+                if counter < 200:
+                    weights_str = line[1:-2]#remove brackets
+                    weights_str = weights_str.split(',')
+                    weights = [float(w) for w in  weights_str]
+                    self.W1[counter] = weights
+                elif counter == 201:
+                    weights_str = line[2:-3]#remove brackets
+                    weights_str = weights_str.split(',')
+                    weights = [float(w) for w in  weights_str]
+                    self.W2 = np.array([weights])
+                    self.W2 = self.W2.transpose()
+                else:
+                    weights_str = line[2:-3]#remove brackets
+                    weights_str = weights_str.split(',')
+                    weights = [float(w) for w in  weights_str]
+                    self.b1 = np.array([weights])
+                    self.b1 = self.b1.transpose()
+            counter = counter + 1
+
         self.alpha = 0.0001
-        self.discount = 0.9
+        self.reg = 0.000
+        self.discount = 0.0
+        fl.close()
         
     
     def choose(self):
@@ -29,16 +64,19 @@ class NeuralNetStrategy(AbstractStrategy):
             legalFields[tuple(['skip'])] = self.initGameState.field
         
         best_val, moves = self.getValue(legalFields, self.initGameState.currentPiece, self.initGameState.Round)
-        #~ sys.stderr.write('Best_val:' + str(best_val) +' ')
+        sys.stderr.write('Best_val:' + str(best_val[0][0]) +' ')
         if moves == tuple(['drop']):
             return moves
             
         reward = self.computeReward(copy.deepcopy(legalFields[moves]),moves)
 
         self.update(legalFields, moves, self.initGameState.currentPiece, self.initGameState.Round, reward)
-        #~ f = open('weights.txt','w')
-        #~ f.write(str(self.weights))
-        #~ f.close()
+        f = open('weights.txt','w')
+        for line in self.W1:
+            f.write(str(line.tolist()) + '\n')
+        f.write(str(self.W2.transpose()[:].tolist()) +  '\n')
+        f.write(str(self.b1.transpose()[:].tolist()) + '\n')
+        f.close()
         
         return moves
         
@@ -52,7 +90,7 @@ class NeuralNetStrategy(AbstractStrategy):
         reward = legalField.computeReward(complete_rows, tSpin)
         reward = self.initGameState.combo*(reward>0)  + reward  
         reward = (3*reward + complete_rows**2)*(complete_rows > 0) + numOfTholes**2 - (max(heights)/3.0)*(complete_rows==0 and numOfTholes==0)
-        #~ sys.stderr.write('Reward:' + str(reward) + '\n')
+        sys.stderr.write('Reward:' + str(reward) + '\n')
         return reward
         
     #~ def computeFeatures(self, legalField, moves, piece,Round):
@@ -97,11 +135,16 @@ class NeuralNetStrategy(AbstractStrategy):
         
         field = np.array(tempField.field)
         field = field.ravel().T
-        
+        field[field==1] = 0
+        field[field > 1] = 1
         # Forward pass
-        self.X1 = self.sigmoid(field.dot(self.W1))
-        
-        qValue = self.sigmoid(self.X1.dot(self.W2))
+        #~ A = field.dot(self.W1)
+        #~ print A.shape
+        #~ print self.b1.shape
+        self.X1 = self.sigmoid(field.dot(self.W1) + self.b1.T)
+        #~ sys.stderr.write('Redsdfsfsdfdsf:' + str(max(max(field.dot(self.W1) + self.b1.T))) + '\n')
+        #~ print self.X1.shape
+        qValue = self.X1.dot(self.W2)
         
         
         return qValue
@@ -131,47 +174,50 @@ class NeuralNetStrategy(AbstractStrategy):
         bestQValue, bst_moves = self.getValue(legalFields2, nextState.currentPiece, nextState.Round)
         
         field = np.array(legalFields[moves].field).ravel().T
-        
+        field[field==1] = 0
+        field[field > 1] = 1
         # back propagation
         
-        loss = -(reward + self.discount * bestQValue  - self.getQValue(legalFields, moves, piece, Round))
+        diff = (reward + self.discount * bestQValue  - self.getQValue(legalFields, moves, piece, Round))
+            
+        loss = diff**2
         
-        dloss = self.sigmoid(loss) * (1 - self.sigmoid(loss))
+        dloss = -2*diff
         
-        dloss = np.array(dloss)
-        print dloss.size
         
-        dW2 = -self.X1 * (dloss)
         
-        dX1 = -dloss * self.W2
+        dW2 = dloss.dot(self.X1)
+        
+        dX1 = dloss.dot(self.W2.T)
         
         #~ print dX1.shape
         field = np.array([field])
         #~ print field.shape
+        
         dX1 = self.sigmoid(dX1)*(1 - self.sigmoid(dX1))
         
-        dW1 = dX1.dot(field)
-        dW1 = dW1.T
-        dW2 = dW2.T
-        print self.W2.shape
-        print dW2.shape
+        
+        dW1 = dX1.T.dot(field)
+        
+        
+        db1 = dX1.T +  self.reg*self.b1
+            
+        dW1 = dW1.T + self.reg*self.W1
+        dW2 = dW2.T + self.reg*self.W2
         
 # gradient descent 
-        #~ print self.W1
+        
         self.W1 -= self.alpha*dW1
-        #~ print self.W1
-        
-        A =  self.alpha*dW2
-        A = np.array([A])
-        A = A.T
-        self.W2 -= A
-        
-                #~ print dW1.shape
-        #~ for i in range(len(features)):
-            # getValues should be fixed !!!!!!!!!!!!!!!!
-            
-            #~ self.weights[i] += self.alpha * (reward + self.discount * bestQValue  - self.getQValue(legalFields, moves, piece, Round)) * features[i]
+        self.W2 -= self.alpha*dW2
+        self.b1 -= self.alpha*db1
+    
+    
+    
     
     def sigmoid(self, X):
-        exponencial = np.exp(-X) + 1
+        try:
+            exponencial = np.exp(-X) + 1
+        except ValueError:
+            sys.stderr.write('paixthke malakia' + '\n')
+            return 0   
         return np.divide(1.0, exponencial)
