@@ -25,9 +25,9 @@ class NeuralNetStrategy(AbstractStrategy):
             if counter > 202:
                 break
             if line in ['\n', '\r\n']:
-                self.W1 = np.random.rand(200, self.secondLayer)
-                self.W2 = np.random.rand(self.secondLayer, 1)
-                self.b1 = np.random.rand(self.secondLayer, 1) 
+                self.W1 = np.random.rand(200, self.secondLayer)/np.sqrt(2000/2)
+                self.W2 = np.random.rand(self.secondLayer, 1)/np.sqrt(self.secondLayer/2)
+                self.b1 = np.random.rand(self.secondLayer, 1)/np.sqrt(self.secondLayer/2)
                 break
             else:
                 
@@ -130,13 +130,12 @@ class NeuralNetStrategy(AbstractStrategy):
         qValue = 0.0
         tempField = copy.deepcopy(legalFields[moves])
         
-        # delete complete rows
-        complete_rows =  tempField.numOfCompleteRows()
-        
         field = np.array(tempField.field)
         field = field.ravel().T
-        field[field==1] = 0
-        field[field > 1] = 1
+        field[field == 1] = 0
+        field[field == 2] = 1
+        field[field == 4] = 1
+        field = self.changeComRows(field)
         # Forward pass
         #~ A = field.dot(self.W1)
         #~ print A.shape
@@ -167,7 +166,7 @@ class NeuralNetStrategy(AbstractStrategy):
         
         #~ features = self.computeFeatures(legalFields[moves], moves, piece,Round)
         #delete complete rows
-        complete_rows = legalFields[moves].numOfCompleteRows()
+        #~ complete_rows = legalFields[moves].numOfCompleteRows()
         
         nextState = GameState(legalFields[moves], (self.initGameState.combo+1)*(legalFields[moves].points>0), self.initGameState.skips,self.initGameState.nextPiece, None, [3, -1], self.initGameState.timebank,self.initGameState.Round +1)
         legalFields2 = nextState.getLegalActions()
@@ -175,7 +174,9 @@ class NeuralNetStrategy(AbstractStrategy):
         
         field = np.array(legalFields[moves].field).ravel().T
         field[field==1] = 0
-        field[field > 1] = 1
+        field[field == 2] = 1
+        field[field == 4] = 1
+        field = self.changeComRows(field)
         # back propagation
         
         diff = (reward + self.discount * bestQValue  - self.getQValue(legalFields, moves, piece, Round))
@@ -194,7 +195,7 @@ class NeuralNetStrategy(AbstractStrategy):
         field = np.array([field])
         #~ print field.shape
         
-        dX1 = self.sigmoid(dX1)*(1 - self.sigmoid(dX1))
+        dX1 = self.X1*(1 - self.X1)*dX1
         
         
         dW1 = dX1.T.dot(field)
@@ -212,8 +213,19 @@ class NeuralNetStrategy(AbstractStrategy):
         self.b1 -= self.alpha*db1
     
     
-    
-    
+    def changeComRows(self, field):
+        i = 0
+        #~ sys.stderr.write(str(field.shape) + '\n')
+        for i in range(20):
+            row = field[10*i:i+10]
+            a = row.tolist()
+            #~ sys.stderr.write(str(row) + '\n')
+            if a.count(1)==10:
+                field[10*i:i+10] = -np.ones(10)
+        #~ sys.stderr.write(str(field) + '\n')
+        return field
+
+        
     def sigmoid(self, X):
         try:
             exponencial = np.exp(-X) + 1

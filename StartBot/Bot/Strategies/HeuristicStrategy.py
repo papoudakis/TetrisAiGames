@@ -11,7 +11,7 @@ import time
 import copy
 
 #~ from Field import field
-class NoobStrategy(AbstractStrategy):
+class HeuristicStrategy(AbstractStrategy):
     def __init__(self, game):
         AbstractStrategy.__init__(self, game)
         
@@ -26,8 +26,8 @@ class NoobStrategy(AbstractStrategy):
             
         bestFields, bestMoves , bestScores = self.FirstLevelStates(legalFields)
         #~ self.report(bestFields,bestMoves,bestScores)
-        #~ index = self.SecondLevelStates(bestFields)
-        index = 0
+        index = self.SecondLevelStates(bestFields)
+        #~ index = 0
         #~ print len(bestFields)
         #~ print len(bestMoves)
 
@@ -38,6 +38,7 @@ class NoobStrategy(AbstractStrategy):
         #~ print bestFields[index].computeBumbines(bestFields[index].computeHeigths())
         #~ end1 = time.time()
         #~ print end1 - start1
+        
         return bestMoves[index]
     
     
@@ -70,6 +71,7 @@ class NoobStrategy(AbstractStrategy):
         return 7*reward - 10*numOfHoles + 10*legalField.points + 20*numOfTholes**2 - 1*max(heights), reward
 
     def FirstLevelStates(self,legalFields):
+        sys.stderr.write('Reward:' + str(1) + '\n')
         scores  = []
         fields = []
         moves = []

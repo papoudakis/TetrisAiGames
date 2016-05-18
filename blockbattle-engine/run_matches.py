@@ -10,7 +10,7 @@ def f(i, j):
     print 'Finished game ' +str(i) + ',' + str(j)
 if __name__ == '__main__':
   call('rm err.txt',shell = True)
-  for j in range(2):
+  for j in range(2500):
       for i in range(1):
           p = Process(target=f, args=(i,j,))
           p.start()

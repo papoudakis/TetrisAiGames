@@ -16,7 +16,9 @@ import random
 class QLearningStrategy(AbstractStrategy):
     
     def __init__(self, game):
-        AbstractStrategy.__init__(self, game)      
+        AbstractStrategy.__init__(self, game)
+
+        self.reward = 0      
         fl = open('weights.txt', 'r')
         weights_str = fl.readline()
         if '\n' in list(weights_str):
@@ -30,6 +32,7 @@ class QLearningStrategy(AbstractStrategy):
         self.discount = 0
         
         fl.close()
+        
     def choose(self):
         self.initGameState = self._game.getInitGameState();
         #~ self.initGameState.field.printField()
@@ -43,8 +46,8 @@ class QLearningStrategy(AbstractStrategy):
             return moves
             
         reward = self.computeReward(copy.deepcopy(legalFields[moves]),moves)
-
-        self.update(legalFields, moves, self.initGameState.currentPiece, self.initGameState.Round, reward)
+        self.reward += reward
+        self.update(legalFields, moves, self.initGameState.currentPiece, self.initGameState.Round, self.reward)
         f = open('weights.txt','w')
         f.write(str(self.weights))
         f.close()
@@ -52,13 +55,13 @@ class QLearningStrategy(AbstractStrategy):
         return moves
         
     def computeReward(self,legalField,moves):
-        tSpin = legalField.computeTspin(self.initGameState.currentPiece, moves)#???????
+        tSpin = legalField.computeTspin(self.initGameState.currentPiece, moves)
         complete_rows =  legalField.numOfCompleteRows()
         heights = legalField.computeHeigths()
         reward = legalField.computeReward(complete_rows, tSpin)
         reward = self.initGameState.combo*(reward>0)  + reward  
         reward = reward - max(heights)
-        sys.stderr.write('Reward:' + str(reward) + '\n')
+        sys.stderr.write('Reward:' + str(self.reward) + '\n')
         return reward
         
     def computeFeatures(self, legalField, moves, piece,Round):
