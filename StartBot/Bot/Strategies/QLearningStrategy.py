@@ -120,8 +120,6 @@ class QLearningStrategy(AbstractStrategy):
         legalFields2 = nextState.getLegalActions()
         bestQValue, bst_moves = self.getValue(legalFields2, nextState.currentPiece, nextState.Round)
         
-        for i in range(len(features)):
-            # getValues should be fixed !!!!!!!!!!!!!!!!
-            
+        for i in range(len(features)):            
             self.weights[i] += self.alpha * (reward + self.discount * bestQValue  - self.getQValue(legalFields, moves, piece, Round)) * features[i]
 
