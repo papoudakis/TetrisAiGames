@@ -60,15 +60,15 @@ class HeuristicStrategy(AbstractStrategy):
         #~ print numOfTholes
         #~ print agg_heights
         #~ agg_heights2 = sum([a - min(agg_heights) for a in agg_heights])
-        #~ numOfHoles, holes = legalField.numOfHoles(heights)
-        #~ coastline = legalField.computeCoastLine(holes)
+        numOfHoles, holes = legalField.numOfHoles(heights)
+        coastline = legalField.computeCoastLine(holes)
         #~ return 7*reward - 2*max(heights) - 10*numOfHoles - 2*legalField.computeBumbines(heights)  + 12*legalField.points - 0.2*agg_heights + 8*numOfTholes**2, reward
 
         numOfHoles, holes = legalField.numOfHoles(heights)
-        coastline = legalField.computeCoastLine(holes)
-        semiCompleteRows = legalField.computeSemiCompleteRows(holes)
-
-        return 7*reward - 10*numOfHoles + 10*legalField.points + 20*numOfTholes**2 - 1*max(heights), reward
+        #~ coastline = legalField.computeCoastLine(holes)
+        #~ semiCompleteRows = legalField.computeSemiCompleteRows(holes)
+#~ 
+        return 7*reward - 2*max(heights) - 10*numOfHoles - 2*legalField.computeBumbines(heights)  + 12*legalField.points - 0.2*agg_heights + 8*numOfTholes**2, reward
 
     def FirstLevelStates(self,legalFields):
         sys.stderr.write('Reward:' + str(1) + '\n')

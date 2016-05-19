@@ -22,7 +22,7 @@ class QLearningStrategy(AbstractStrategy):
         fl = open('weights.txt', 'r')
         weights_str = fl.readline()
         if '\n' in list(weights_str):
-            self.weights = [0 for i in range(4)]
+            self.weights = [0 for i in range(8)]
         else:
             weights_str = weights_str[1:-1]#remove brackets
             weights_str = weights_str.split(',')
@@ -35,7 +35,6 @@ class QLearningStrategy(AbstractStrategy):
         
     def choose(self):
         self.initGameState = self._game.getInitGameState();
-        #~ self.initGameState.field.printField()
         legalFields = self.initGameState.getLegalActions()
         if self.initGameState.skips > 0:
             legalFields[tuple(['skip'])] = self.initGameState.field
@@ -70,30 +69,25 @@ class QLearningStrategy(AbstractStrategy):
         features = []
         tSpin = legalField.computeTspin(piece, moves)
         complete_rows =  legalField.numOfCompleteRows()
-        #~ isDeath = legalField.solidLines(Round)
-        #~ if isDeath:
-            #~ return -float('Inf'),0
-            #~ 
         reward = legalField.computeReward(complete_rows, tSpin)
         reward = self.initGameState.combo*(reward>0)  + reward
         heights = legalField.computeHeigths()
         w_heights = [0.5, 0.75, 0.75, 1, 1, 1, 1, 0.75, 0.75, 0.5] 
-        #~ agg_heights = sum([a*b for a,b in zip(heights,w_heights)])
-        agg_heights = sum(heights)
+        agg_heights = sum([a*b for a,b in zip(heights,w_heights)])
         numOfTholes = legalField.checkForTholes()
         numOfHoles, holes = legalField.numOfHoles(heights)
         coastline = legalField.computeCoastLine(holes)
         bumbiness = legalField.computeBumbines(heights)
-        #~ semiCompleteRows = legalField.computeSemiCompleteRows(holes)
+        semiCompleteRows = legalField.computeSemiCompleteRows(holes)
         #~ features.append(reward)
         features.append(max(heights))
         features.append(numOfHoles)
         features.append(bumbiness)
         features.append(complete_rows)
-        #~ features.append(tSpin)
-        #~ features.append(numOfTholes**2)
-        #~ features.append(coastline)
-        #~ features.append(semiCompleteRows**2*(semiCompleteRows>1))
+        features.append(tSpin)
+        features.append(numOfTholes**2)
+        features.append(coastline)
+        features.append(semiCompleteRows**2*(semiCompleteRows>1))
         return features
     
     def getQValue(self, legalFields, moves, piece,Round):
