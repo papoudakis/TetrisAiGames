@@ -52,7 +52,6 @@ class HeuristicStrategy(AbstractStrategy):
         return 7*reward - 2*max(heights) - 10*numOfHoles - 2*legalField.computeBumbines(heights)  + 12*legalField.points - 0.2*agg_heights + 8*numOfTholes**2, reward
 
     def FirstLevelStates(self,legalFields):
-        sys.stderr.write('Reward:' + str(1) + '\n')
         scores  = []
         fields = []
         moves = []
