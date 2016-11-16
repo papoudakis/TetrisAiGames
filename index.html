@@ -1,56 +1,81 @@
 <!DOCTYPE html>
-<html lang="en-us">
+<html>
+
   <head>
-    <meta charset="UTF-8">
-    <title>TetroManiac by papoudakis</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="TetroManiac : ">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>TetroManiac</title>
   </head>
+
   <body>
-    <section class="page-header">
-      <h1 class="project-name">TetroManiac</h1>
-      <h2 class="project-tagline"></h2>
-      <a href="https://github.com/papoudakis/TetrisAiGames" class="btn">View on GitHub</a>
-      <a href="https://github.com/papoudakis/TetrisAiGames/zipball/master" class="btn">Download .zip</a>
-      <a href="https://github.com/papoudakis/TetrisAiGames/tarball/master" class="btn">Download .tar.gz</a>
-    </section>
 
-    <section class="main-content">
-      <h1></h1>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/papoudakis/TetrisAiGames">View on GitHub</a>
 
-<p>This autofghfghfghmatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here <a href="https://guides.github.com/features/mastering-markdown/">using GitHub Flavored Markdown</a>, select a template crafted by a designer, and publish. After your page is generated, you can check out the new <code>gh-pages</code> branch locally. If you’re using GitHub Desktop, simply sync your repository and you’ll see the new branch.</p>
+          <h1 id="project_title">TetroManiac</h1>
+          <h2 id="project_tagline"></h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/papoudakis/TetrisAiGames/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/papoudakis/TetrisAiGames/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a id="tetromaniac" class="anchor" href="#tetromaniac" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Tetromaniac</h1>
+
+<p>This page is created to describe the details of the ideas and concepts used for the Tetris Bot TetroManiac. This bot is operating inside the <a href="http://theaigames.com/competitions/ai-block-battle">AiGames-Blockbattle</a> platform. The following chapters will mention the different steps that were taken in developing the Bot. </p>
+
+<h2>
+<a id="basic-rules" class="anchor" href="#basic-rules" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Basic Rules</h2>
+
+<h2>
+<a id="inputoutput" class="anchor" href="#inputoutput" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Input/Output</h2>
+
+<h2>
+<a id="find-possible-moves" class="anchor" href="#find-possible-moves" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Find possible Moves</h2>
+
+<h2>
+<a id="choosing-features" class="anchor" href="#choosing-features" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Choosing Features</h2>
+
+<h2>
+<a id="selecting-optimal-move" class="anchor" href="#selecting-optimal-move" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Selecting Optimal Move</h2>
 
 <h3>
-<a id="designer-templates" class="anchor" href="#designer-templates" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Designer Templates</h3>
-
-<p>We’ve crafted some handsome templates for you to use. Go ahead and click 'Continue to layouts' to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved.</p>
+<a id="heuristic-approach" class="anchor" href="#heuristic-approach" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Heuristic Approach</h3>
 
 <h3>
-<a id="creating-pages-manually" class="anchor" href="#creating-pages-manually" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Creating pages manually</h3>
+<a id="q-learning-approach" class="anchor" href="#q-learning-approach" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Q-learning Approach</h3>
 
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
+<h2>
+<a id="results" class="anchor" href="#results" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Results</h2>
 
-<h3>
-<a id="authors-and-contributors" class="anchor" href="#authors-and-contributors" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Authors and Contributors</h3>
+<h2>
+<a id="authors" class="anchor" href="#authors" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Authors</h2>
 
-<p>You can @mention a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor’s GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+<p>The aforementioned project was created by Chamzas Konstantinos (<a href="https://github.com/ChamzasKonstantinos" class="user-mention">@ChamzasKonstantinos</a>) and Papoudakis Georgios(<a href="https://github.com/papoudakis" class="user-mention">@papoudakis</a>)</p>
+      </section>
+    </div>
 
-<h3>
-<a id="support-or-contact" class="anchor" href="#support-or-contact" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Support or Contact</h3>
-
-<p>Having trouble with Pages? Check out our <a href="https://help.github.com/pages">documentation</a> or <a href="https://github.com/contact">contact support</a> and we’ll help you sort it out.</p>
-
-      <footer class="site-footer">
-        <span class="site-footer-owner"><a href="https://github.com/papoudakis/TetrisAiGames">TetroManiac</a> is maintained by <a href="https://github.com/papoudakis">papoudakis</a>.</span>
-
-        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">TetroManiac maintained by <a href="https://github.com/papoudakis">papoudakis</a></p>
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
       </footer>
+    </div>
 
-    </section>
+    
 
-  
   </body>
 </html>
