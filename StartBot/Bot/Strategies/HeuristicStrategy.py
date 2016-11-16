@@ -1,11 +1,5 @@
 from random import randint
 import sys,os
-sys.path.append("/home/konstantinos/AiGames/TetrisAiGames/StartBot/Bot/Game")
-sys.path.append("/home/giorgos/University/TetrisAiGames/StartBot/Bot/Game")
-sys.path.append("/home/argiris/Desktop/TetrisAiGames/StartBot/Bot/Game")
-sys.path.append(os.getcwd() + '/Bot/Game')
-sys.path.append("/src/StartBot/Bot/Game")
-from GameState import GameState
 from AbstractStrategy import AbstractStrategy
 import time
 import copy
@@ -26,7 +20,7 @@ class HeuristicStrategy(AbstractStrategy):
     # choose best move based on second field
     
         index = self.SecondLevelStates(bestFields)
-
+        print index
         return bestMoves[index]
     
     
@@ -91,7 +85,7 @@ class HeuristicStrategy(AbstractStrategy):
         index = 0 
         for field in legalFields:
             score = []
-            nextState = GameState(copy.deepcopy(field), (self.initGameState.combo+1)*(field.points>0), self.initGameState.skips,self.initGameState.nextPiece, None, [3, -1], self.initGameState.timebank,self.initGameState.Round +1)
+            nextState = self._game.nextGameState(copy.deepcopy(field), (self.initGameState.combo+1)*(field.points>0), self.initGameState.skips,self.initGameState.nextPiece, None, [3, -1], self.initGameState.timebank,self.initGameState.Round +1)
             legalFields2 = nextState.getLegalActions()
             for move in legalFields2.keys():
                 f = legalFields2[move]

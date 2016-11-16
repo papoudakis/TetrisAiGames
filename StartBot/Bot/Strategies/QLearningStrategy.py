@@ -1,11 +1,5 @@
 from random import randint
 import sys,os
-sys.path.append("/home/konstantinos/AiGames/TetrisAiGames/StartBot/Bot/Game")
-sys.path.append("/home/giorgos/University/TetrisAiGames/StartBot/Bot/Game")
-sys.path.append("/home/argiris/Desktop/TetrisAiGames/StartBot/Bot/Game")
-sys.path.append(os.getcwd() + '/Bot/Game')
-sys.path.append("/src/StartBot/Bot/Game")
-from GameState import GameState
 from AbstractStrategy import AbstractStrategy
 import time
 import copy
@@ -116,7 +110,7 @@ class QLearningStrategy(AbstractStrategy):
     #  Should update your weights based on transition
         
         features = self.computeFeatures(legalFields[moves], moves, piece,Round)
-        nextState = GameState(legalFields[moves], (self.initGameState.combo+1)*(legalFields[moves].points>0), self.initGameState.skips,self.initGameState.nextPiece, None, [3, -1], self.initGameState.timebank,self.initGameState.Round +1)
+        nextState = self._game.nextGameState(legalFields[moves], (self.initGameState.combo+1)*(legalFields[moves].points>0), self.initGameState.skips,self.initGameState.nextPiece, None, [3, -1], self.initGameState.timebank,self.initGameState.Round +1)
         legalFields2 = nextState.getLegalActions()
         bestQValue, bst_moves = self.getValue(legalFields2, nextState.currentPiece, nextState.Round)
         
