@@ -11,17 +11,19 @@ class QLearningStrategy(AbstractStrategy):
     
     def __init__(self, game):
         AbstractStrategy.__init__(self, game)
-
-        self.reward = 0      
-        fl = open('weights.txt', 'r')
-        weights_str = fl.readline()
-        if '\n' in list(weights_str):
-            self.weights = [0 for i in range(8)]
+        self.reward = 0
+        if not os.path.exists("weights.txt"):
+            fl = open('weights.txt', 'w')
         else:
-            weights_str = weights_str[1:-1]#remove brackets
-            weights_str = weights_str.split(',')
+            fl = open('weights.txt', 'r')
+        weights_str = fl.readline()
+        
+        weights_str = weights_str[1:-1]#remove brackets
+        weights_str = weights_str.split(',')
+        try:
             self.weights = [float(w) for w in  weights_str]
-                     
+        except ValueError:
+            self.weights = [0 for i in range(8)]             
         self.alpha = 0.0001
         self.discount = 0
         
@@ -40,7 +42,7 @@ class QLearningStrategy(AbstractStrategy):
             
         reward = self.computeReward(copy.deepcopy(legalFields[moves]),moves)
         self.reward += reward
-        self.update(legalFields, moves, self.initGameState.currentPiece, self.initGameState.Round, self.reward)
+        self.update(legalFields, moves, self.initGameState.currentPiece, self.initGameState.Round, reward)
         f = open('weights.txt','w')
         f.write(str(self.weights))
         f.close()
@@ -73,7 +75,6 @@ class QLearningStrategy(AbstractStrategy):
         coastline = legalField.computeCoastLine(holes)
         bumbiness = legalField.computeBumbines(heights)
         semiCompleteRows = legalField.computeSemiCompleteRows(holes)
-        #~ features.append(reward)
         features.append(max(heights))
         features.append(numOfHoles)
         features.append(bumbiness)
