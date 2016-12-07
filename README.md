@@ -9,10 +9,9 @@ In this implementation we compute feature and evaluate the best move based on a 
 # QLearning Implementation
 Similar to heuristic implementation. The only difference is that we compute the weights of evaluation function using qlearning.
 
-**To run qlearning locally**
+##To run Q-learning locally
+```
+cd blockbattle-engine/
 
--cd blockbattle-engine/
-
--create an empty file named weigths.txt
-
--python run_matches.py  
+python run_matches.py  
+```
